@@ -271,7 +271,6 @@ export PATH="$(brew --prefix llvm@19)/bin:$PATH"
 export PATH="$HOME/.local/bin:$PATH"
 export MINIO_CONFIG_ENV_FILE=/etc/default/minio
 export S3_R2_ACCESS_KEY=0e7dd629c8057a833537a5ec16874391
-export S3_R2_SECRET_KEY=df9042db1543cdad766ab5a8e1e7753cff129513a848132e5222111ac733d41f
 export S3_R2_ENDPOINT=https://5853eec0465aff9a7034c3d4e7626a3d.r2.cloudflarestorage.com
 export S3_R2_BUCKET=bun-test
 export VOLTA_HOME="$HOME/.volta"
