@@ -1,0 +1,23 @@
+# Starship Prompt Configuration
+
+# プロンプト全体のフォーマット
+format = """
+$directory$git_branch$character"""
+
+# 不要なモジュールを無効化
+add_newline = false
+
+# ディレクトリ（鮮やかな紫）
+[directory]
+format = "[${path}](bold color(135)) "
+truncation_length = 3
+truncate_to_repo = false
+
+# Gitブランチ git管理下のみ表示
+[git_branch]
+format = "[\\[$branch\\]](bold color(82)) "
+
+# プロンプト文字 （3色：039, 082, 196）
+[character]
+success_symbol = "[>](bold color(39))[>](bold color(82))[>](bold color(196))"
+error_symbol = "[>](bold color(39))[>](bold color(82))[>](bold color(196))"
