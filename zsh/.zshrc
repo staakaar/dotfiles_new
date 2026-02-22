@@ -18,6 +18,10 @@ eval "$(direnv hook zsh)"
 export PS1='%F{165}%~ %F{039}>%F{082}>%F{196}>%f%F{255} '
 
 # ======================Function===============================
+function docker-rmi(){
+    selection=$(docker images | fzf | awk '{print $3}')
+    [ -n "$selection" ] && docker rmi $selection 
+}
 
 ## rprompt-git-setting
 function rprompt-git-current-branch {

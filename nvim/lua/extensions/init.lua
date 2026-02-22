@@ -51,6 +51,20 @@ local plugins = {
     keys = {
       { "<leader>e", "<Cmd>Fyler<Cr>", desc = "Open Fyler View" },
     }
+  },
+  {
+    'nvim-telescope/telescope.nvim', version = '*',
+    keys = {
+      '<leader>ff', '<leader>fg', '<leader>fb', '<leader>fh'
+    },
+    config = function() require 'extensions.telescope' end,
+    dependencies = {
+        'nvim-lua/plenary.nvim',
+        -- optional but recommended
+        { 'nvim-telescope/telescope-fzf-native.nvim', build = 'make' },
+        { 'sharkdp/fd', build = 'make' },
+        { "nvim-tree/nvim-web-devicons", opts = {}, build = 'make' },
+    },
   }
   -- {
   --   "nvim-tree/nvim-tree.lua",

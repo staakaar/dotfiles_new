@@ -1,3 +1,6 @@
+vim.g.mapleader = " "
+vim.g.maplocalleader = "\\"
+
 vim.opt.relativenumber = true
 vim.opt.clipboard:append('unnamedplus,unnamed')
 vim.opt.backspace = "indent,eol,start"
