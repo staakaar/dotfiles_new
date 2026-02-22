@@ -1,0 +1,8 @@
+.zcompdump*
+lazy-lock.json
+**/*.zwc
+*.zwc
+nvim/lazy-lock.json
+zsh/.zsh_history
+**/*.zwc
+zsh/.zsh_history
