@@ -2,7 +2,7 @@ local plugins = {
   {
     "EdenEast/nightfox.nvim",
     lazy = false,
-    priority = 1000,  -- 他のプラグインより先にロード
+    priority = 1000, -- 他のプラグインより先にロード
     config = function()
       require("nightfox").setup({
         options = {
@@ -16,7 +16,7 @@ local plugins = {
           },
         },
       })
-      vim.cmd("colorscheme nightfox")  -- テーマ選択
+      vim.cmd("colorscheme nightfox") -- テーマ選択
     end,
   },
   {
@@ -73,17 +73,18 @@ local plugins = {
     }
   },
   {
-    'nvim-telescope/telescope.nvim', version = '*',
+    'nvim-telescope/telescope.nvim',
+    version = '*',
     keys = {
       '<leader>ff', '<leader>fg', '<leader>fb', '<leader>fh'
     },
     config = function() require 'extensions.telescope' end,
     dependencies = {
-        'nvim-lua/plenary.nvim',
-        -- optional but recommended
-        { 'nvim-telescope/telescope-fzf-native.nvim', build = 'make' },
-        { 'sharkdp/fd', build = 'make' },
-        { "nvim-tree/nvim-web-devicons", opts = {}, build = 'make' },
+      'nvim-lua/plenary.nvim',
+      -- optional but recommended
+      { 'nvim-telescope/telescope-fzf-native.nvim', build = 'make' },
+      { 'sharkdp/fd',                               build = 'make' },
+      { "nvim-tree/nvim-web-devicons",              opts = {},     build = 'make' },
     },
   },
   {
@@ -101,10 +102,10 @@ local plugins = {
     "antosha417/nvim-lsp-file-operations",
     dependencies = {
       "nvim-lua/plenary.nvim",
-    -- Uncomment whichever supported plugin(s) you use
-    -- "nvim-tree/nvim-tree.lua",
-    -- "nvim-neo-tree/neo-tree.nvim",
-    -- "simonmclean/triptych.nvim"
+      -- Uncomment whichever supported plugin(s) you use
+      -- "nvim-tree/nvim-tree.lua",
+      -- "nvim-neo-tree/neo-tree.nvim",
+      -- "simonmclean/triptych.nvim"
     },
     config = function()
       require("lsp-file-operations").setup()
@@ -136,7 +137,7 @@ local plugins = {
           -- Ruby
           "solargraph",
           -- Go
-          "gopls",
+          -- "gopls",
           -- Rust
           "rust_analyzer",
           -- Elixir
@@ -178,28 +179,28 @@ local plugins = {
         local map = vim.keymap.set
         local opts = { buffer = bufnr, silent = true }
 
-        map("n", "gd",         vim.lsp.buf.definition,      vim.tbl_extend("force", opts, { desc = "Go to definition" }))
-        map("n", "gr",         vim.lsp.buf.references,      vim.tbl_extend("force", opts, { desc = "Go to references" }))
-        map("n", "K",          vim.lsp.buf.hover,           vim.tbl_extend("force", opts, { desc = "Hover docs" }))
-        map("n", "<leader>rn", vim.lsp.buf.rename,          vim.tbl_extend("force", opts, { desc = "Rename" }))
-        map("n", "<leader>ca", vim.lsp.buf.code_action,     vim.tbl_extend("force", opts, { desc = "Code action" }))
-        map("n", "<leader>f",  vim.lsp.buf.format,          vim.tbl_extend("force", opts, { desc = "Format" }))
-        map("n", "[d",         vim.diagnostic.goto_prev,    vim.tbl_extend("force", opts, { desc = "Prev diagnostic" }))
-        map("n", "]d",         vim.diagnostic.goto_next,    vim.tbl_extend("force", opts, { desc = "Next diagnostic" }))
+        map("n", "gd", vim.lsp.buf.definition, vim.tbl_extend("force", opts, { desc = "Go to definition" }))
+        map("n", "gr", vim.lsp.buf.references, vim.tbl_extend("force", opts, { desc = "Go to references" }))
+        map("n", "K", vim.lsp.buf.hover, vim.tbl_extend("force", opts, { desc = "Hover docs" }))
+        map("n", "<leader>rn", vim.lsp.buf.rename, vim.tbl_extend("force", opts, { desc = "Rename" }))
+        map("n", "<leader>ca", vim.lsp.buf.code_action, vim.tbl_extend("force", opts, { desc = "Code action" }))
+        map("n", "<leader>f", vim.lsp.buf.format, vim.tbl_extend("force", opts, { desc = "Format" }))
+        map("n", "[d", vim.diagnostic.goto_prev, vim.tbl_extend("force", opts, { desc = "Prev diagnostic" }))
+        map("n", "]d", vim.diagnostic.goto_next, vim.tbl_extend("force", opts, { desc = "Next diagnostic" }))
       end
 
       -- 各LSPの設定
       local servers = {
-        "solargraph",   -- Ruby
-        "gopls",        -- Go
-        "rust_analyzer",-- Rust
+        "solargraph",    -- Ruby
+        -- "gopls",        -- Go
+        "rust_analyzer", -- Rust
         -- "elixirls",     -- Elixir
-        "ts_ls",        -- JS / TS / React / Next.js
+        "ts_ls",         -- JS / TS / React / Next.js
         -- "vue_ls",        -- Vue / Nuxt.js
-        "html",         -- HTML
-        "tailwindcss",  -- TailwindCSS
-        "dockerls",     -- Docker
-        "lua_ls",       -- Lua
+        "html",          -- HTML
+        "tailwindcss",   -- TailwindCSS
+        "dockerls",      -- Docker
+        "lua_ls",        -- Lua
       }
 
       for _, server in ipairs(servers) do
@@ -209,20 +210,77 @@ local plugins = {
       -- Java（jdtlsは専用設定が必要）
       lspconfig.jdtls.setup({ on_attach = on_attach })
       lspconfig.gopls.setup({
+        on_attach = on_attach,
         settings = {
           gopls = {
             analyses = {
-              unusedparams = true,
+              unusedparams = true,           -- 未使用パラメータの警告
+              shadow = true,                 -- 変数シャドウの警告
+              unusedvariable = true,         -- 未使用変数の警告
             },
-            staticcheck = true,
-            gofumpt = true,
+            staticcheck = true,              -- staticcheckによる静的解析
+            gofumpt = true,                  -- gofumptによるフォーマット
+            hints = {
+              assignVariableTypes = true,    -- 変数の型ヒント表示
+              compositeLiteralFields = true, -- 構造体フィールドヒント
+              constantValues = true,         -- 定数値ヒント
+              functionTypeParameters = true, -- 関数型パラメータヒント
+              parameterNames = true,         -- パラメータ名ヒント
+              rangeVariableTypes = true,     -- range変数の型ヒント
+            },
           },
         },
       })
-
       -- Kotlin
       lspconfig.kotlin_language_server.setup({ on_attach = on_attach })
+    end,
+  },
+  {
+    "hrsh7th/nvim-cmp",
+    dependencies = {
+      "hrsh7th/cmp-nvim-lsp",
+      "hrsh7th/cmp-buffer",
+      "hrsh7th/cmp-path",
+      "L3MON4D3/LuaSnip",
+      "saadparwaiz1/cmp_luasnip",
+      "rafamadriz/friendly-snippets",
+    },
+  },
+  { "nvimdev/lspsaga.nvim" },
+  { "j-hui/fidget.nvim",     opts = {} },
+  { "folke/trouble.nvim",    opts = {} },
+  -- Linter
+  { "mfussenegger/nvim-lint" },
+  {
+    "stevearc/conform.nvim",
+    event = { "BufWritePre" },
+    config = function()
+      require("conform").setup({
+        formatters_by_ft = {
+          go         = { "gofumpt", "goimports" },
+          ruby       = { "rubocop" },
+          rust       = { "rustfmt" },
+          javascript = { "prettier" },
+          typescript = { "prettier" },
+          vue        = { "prettier" },
+          html       = { "prettier" },
+          css        = { "prettier" },
+          json       = { "prettier" },
+          lua        = { "stylua" },
+          java       = { "google-java-format" },
+          kotlin     = { "ktlint" },
+        },
+        -- 保存時に自動フォーマット
+        format_on_save = {
+          timeout_ms = 500,
+          lsp_fallback = true, -- フォーマッターがなければLSPにフォールバック
+        },
+      })
 
+      -- 手動フォーマットのキーマップ
+      vim.keymap.set({ "n", "v" }, "<leader>cf", function()
+        require("conform").format({ async = true, lsp_fallback = true })
+      end, { desc = "Format file" })
     end,
   },
 }

@@ -28,6 +28,5 @@ vim.api.nvim_set_option('ignorecase', true)
 vim.api.nvim_set_option('smartcase', true)
 vim.api.nvim_set_option('inccommand', 'split')
 
--- 
+--
 vim.api.nvim_create_user_command('InitLua', function() vim.cmd.edit(vim.fn.stdpath('config') .. '/init.lua') end, {})
-

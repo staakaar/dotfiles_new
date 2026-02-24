@@ -52,3 +52,7 @@ map("n", "<leader>tf", "<cmd>NvimTreeFindFile<CR>", { desc = "Find current file 
 
 -- Oil.vim 
 map("n", "-", "<CMD>Oil<CR>", { desc = "Open parent directory" })
+
+-- ペースト後に自動インデント整形
+map("n", "p", "p=`]", { desc = "Paste and auto-indent" })
+map("n", "P", "P=`[", { desc = "Paste above and auto-indent" })
