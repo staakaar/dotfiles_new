@@ -53,6 +53,12 @@ map("n", "<leader>tf", "<cmd>NvimTreeFindFile<CR>", { desc = "Find current file 
 -- Oil.vim 
 map("n", "-", "<CMD>Oil<CR>", { desc = "Open parent directory" })
 
+-- gopls
+map('n', 'K', vim.lsp.buf.hover, { desc = 'Show hover' })
+map('n', 'gd', vim.lsp.buf.definition, { desc = 'Go to definition' })
+map('n', 'gi', vim.lsp.buf.implementation, { desc = 'Go to implementation'})
+map('n', 'gr', vim.lsp.buf.references, bufopts, { desc = 'Show references' })
+
 -- ペースト後に自動インデント整形
 map("n", "p", "p=`]", { desc = "Paste and auto-indent" })
 map("n", "P", "P=`[", { desc = "Paste above and auto-indent" })

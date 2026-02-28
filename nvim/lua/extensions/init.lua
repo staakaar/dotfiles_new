@@ -21,6 +21,15 @@ local plugins = {
   },
   {
     'nvim-treesitter/nvim-treesitter',
+    tag = 'v0.9.3',
+    config = function()
+      require('nvim-treesitter.configs').setup({
+        ensure_installed = { 'go', 'ruby', 'java', 'lua', 'typescript', 'javascript', 'json', 'yaml', 'html', 'css', 'bash', 'python', 'markdown', 'scala' },
+        highlight = {
+          enabled = true,
+        },
+      })
+    end,
     event = { 'BufNewFile', 'BufReadPre' },
   },
   {
@@ -172,7 +181,7 @@ local plugins = {
       "williamboman/mason-lspconfig.nvim",
     },
     config = function()
-      local lspconfig = require("lspconfig")
+      local lspconfig = require("lspconfig").clangd
 
       -- 共通のキーマップ
       local on_attach = function(_, bufnr)
@@ -237,6 +246,24 @@ local plugins = {
   },
   {
     "hrsh7th/nvim-cmp",
+    config = function()
+      local cmp = require('cmp')
+      cmp.setup({
+        mapping = cmp.mapping.preset.cmdline(),
+        sources = {
+          { name = 'nvim-lsp' },
+          { name = 'buffer' },
+          { name = 'path' },
+        },
+        mapping = cmp.mapping.preset.insert({
+          ['<C-b>'] = cmp.mapping.scroll_docs(-4),
+          ['<C-f>'] = cmp.mapping.scroll_docs(4),
+          ['<C-Space>'] = cmp.mapping.complete(),
+          ['<C-e>'] = cmp.mapping.abort(),
+          ['<CR>'] = cmp.mapping.confirm({ select = true }),
+        }),
+      })
+    end,
     dependencies = {
       "hrsh7th/cmp-nvim-lsp",
       "hrsh7th/cmp-buffer",
@@ -245,6 +272,32 @@ local plugins = {
       "saadparwaiz1/cmp_luasnip",
       "rafamadriz/friendly-snippets",
     },
+  },
+  {
+    'hrsh7th/cmp-nvim-lsp',
+    dependencies = {
+      'neovim/nvim-lspconfig',
+    },
+    config = function()
+      require 'cmp'.setup {
+        sources = {
+          { name = 'nvim_lsp' }
+        }
+      }
+      local capabilities = require('cmp_nvim_lsp').default_capabilities()
+      require('lspconfig').clangd.setup {
+        capabilities = capabilities,
+      }
+    end
+  },
+  {
+    'hrsh7th/cmp-buffer',
+  },
+  {
+    'hrsh7th/cmp-path',
+  },
+  {
+    'hrsh7th/cmp-cmdline',
   },
   { "nvimdev/lspsaga.nvim" },
   { "j-hui/fidget.nvim",     opts = {} },
@@ -313,6 +366,7 @@ local opts = {
     },
   },
 }
+
 local lazypath = vim.fn.stdpath("data") .. "/lazy/lazy.nvim"
 if not vim.loop.fs_stat(lazypath) then
   vim.fn.system({
