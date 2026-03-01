@@ -21,13 +21,18 @@ local plugins = {
   },
   {
     'nvim-treesitter/nvim-treesitter',
-    tag = 'v0.9.3',
+    build = ":TSUpdate",
     config = function()
       require('nvim-treesitter.configs').setup({
-        ensure_installed = { 'go', 'ruby', 'java', 'lua', 'typescript', 'javascript', 'json', 'yaml', 'html', 'css', 'bash', 'python', 'markdown', 'scala' },
+        ensure_installed = { 'go', 'ruby', 'rust', 'java', 'vue', 'markdown', 'lua', 'typescript', 'javascript', 'json', 'yaml', 'html', 'css', 'bash', 'python', 'markdown', 'scala' },
+        auto_install = true,
         highlight = {
           enabled = true,
+          addtional_vim_regex_highlighting = false,
         },
+        indent = {
+          enabled = true,
+        }
       })
     end,
     event = { 'BufNewFile', 'BufReadPre' },
@@ -181,7 +186,7 @@ local plugins = {
       "williamboman/mason-lspconfig.nvim",
     },
     config = function()
-      local lspconfig = require("lspconfig").clangd
+      local lspconfig = require("lspconfig")
 
       -- 共通のキーマップ
       local on_attach = function(_, bufnr)
@@ -285,7 +290,7 @@ local plugins = {
         }
       }
       local capabilities = require('cmp_nvim_lsp').default_capabilities()
-      require('lspconfig').clangd.setup {
+      require("lspconfig").gclangd.setup {
         capabilities = capabilities,
       }
     end
@@ -334,6 +339,53 @@ local plugins = {
       vim.keymap.set({ "n", "v" }, "<leader>cf", function()
         require("conform").format({ async = true, lsp_fallback = true })
       end, { desc = "Format file" })
+    end,
+  },
+  {
+    'nvim-neotest/neotest',
+    tag = 'v5.6.1',
+    dependencies = {
+      'nvim-neotest/nvim-nio',
+      'nvim-lua/plenary.nvim',
+      'antoinemadec/FixCursorHold.nvim',
+      'nvim-treesitter/nvim-treesitter',
+      'nvim-neotest/neotest-go',
+      "olimorris/neotest-rspec",
+      "nvim-neotest/neotest-go",
+      "rouge8/neotest-rust",
+      "rcasia/neotest-java",
+      "nvim-neotest/neotest-python",
+    },
+    config = function()
+      require('neotest').setup({
+        adapters = {
+          require('neotest-go')({
+            experimental = {
+              test_table = true,
+            },
+            args = { '-count=1', '-timeout=60s', '-coverprofile=coverage.out' },
+          }),
+
+          require("neotest-rspec"),
+
+          require("neotest-rust"),
+
+          require("neotest-java"),
+
+          require("neotest-python")({
+            dap = { justMyCode = false },
+            runner = "pytest", -- "unittest" に変更も可
+          }),
+        },
+      })
+
+      local map = vim.keymap.set
+      map("n", "<leader>rt", function() require("neotest").run.run() end, { desc = "Run nearest test" })
+      map("n", "<leader>rf", function() require("neotest").run.run(vim.fn.expand("%")) end, { desc = "Run current file" })
+      map("n", "<leader>rs", function() require("neotest").summary.toggle() end, { desc = "Toggle test summary" })
+      map("n", "<leader>ro", function() require("neotest").output.open({ enter = true }) end,
+        { desc = "Open test output" })
+      map("n", "<leader>rS", function() require("neotest").run.stop() end, { desc = "Stop test" })
     end,
   },
 }

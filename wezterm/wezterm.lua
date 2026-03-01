@@ -29,11 +29,11 @@ config.window_frame = {
   inactive_titlebar_bg = '#333333'
 }
 
-config.colors = { 
+config.colors = {
   scrollbar_thumb = 'white',
   tab_bar = {
     inactive_tab_edge = '#575757',
-  } 
+  }
 }
 
 -- keybinds

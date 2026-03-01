@@ -21,43 +21,46 @@ map("v", ">", ">gv", { desc = "インデントを上げて再選択" })
 map("v", "p", '"_dP', { desc = "貼り付け時にレジスタを保持" })
 
 -- カーソル移動
-map("i", "<C-a>", "<Home>",    { desc = "Move to beginning of line" })
-map("i", "<C-e>", "<End>",     { desc = "Move to end of line" })
-map("i", "<C-f>", "<Right>",   { desc = "Move forward one char" })
-map("i", "<C-b>", "<Left>",    { desc = "Move backward one char" })
-map("i", "<C-n>", "<Down>",    { desc = "Move to next line" })
-map("i", "<C-p>", "<Up>",      { desc = "Move to previous line" })
+map("i", "<C-a>", "<Home>", { desc = "Move to beginning of line" })
+map("i", "<C-e>", "<End>", { desc = "Move to end of line" })
+map("i", "<C-f>", "<Right>", { desc = "Move forward one char" })
+map("i", "<C-b>", "<Left>", { desc = "Move backward one char" })
+map("i", "<C-n>", "<Down>", { desc = "Move to next line" })
+map("i", "<C-p>", "<Up>", { desc = "Move to previous line" })
 
 -- 単語単位移動
 map("i", "<M-f>", "<C-Right>", { desc = "Move forward one word" })
-map("i", "<M-b>", "<C-Left>",  { desc = "Move backward one word" })
+map("i", "<M-b>", "<C-Left>", { desc = "Move backward one word" })
 
 -- 削除
-map("i", "<C-d>", "<Del>",     { desc = "Delete char forward" })
-map("i", "<C-h>", "<BS>",      { desc = "Delete char backward" })
-map("i", "<M-d>", "<C-o>de",   { desc = "Delete word forward" })
-map("i", "<M-BS>", "<C-w>",    { desc = "Delete word backward" })
+map("i", "<C-d>", "<Del>", { desc = "Delete char forward" })
+map("i", "<C-h>", "<BS>", { desc = "Delete char backward" })
+map("i", "<M-d>", "<C-o>de", { desc = "Delete word forward" })
+map("i", "<M-BS>", "<C-w>", { desc = "Delete word backward" })
 
 -- 行削除
-map("i", "<C-k>", "<C-o>D",    { desc = "Kill line (delete to end)" })
-map("i", "<C-u>", "<C-o>d0",   { desc = "Delete to beginning of line" })
+map("i", "<C-k>", "<C-o>D", { desc = "Kill line (delete to end)" })
+map("i", "<C-u>", "<C-o>d0", { desc = "Delete to beginning of line" })
 
 -- その他
-map("i", "<C-y>", "<C-r>\"",   { desc = "Yank (paste last deleted)" })
-map("i", "<C-t>", "<C-o>xp",   { desc = "Transpose chars" })
+map("i", "<C-y>", "<C-r>\"", { desc = "Yank (paste last deleted)" })
+map("i", "<C-t>", "<C-o>xp", { desc = "Transpose chars" })
 
 -- nvim-tree
-map("n", "<leader>tt", "<cmd>NvimTreeToggle<CR>",   { desc = "Toggle nvim-tree" })
+map("n", "<leader>tt", "<cmd>NvimTreeToggle<CR>", { desc = "Toggle nvim-tree" })
 map("n", "<leader>tf", "<cmd>NvimTreeFindFile<CR>", { desc = "Find current file in nvim-tree" })
 
--- Oil.vim 
+-- Oil.vim
 map("n", "-", "<CMD>Oil<CR>", { desc = "Open parent directory" })
 
 -- gopls
 map('n', 'K', vim.lsp.buf.hover, { desc = 'Show hover' })
 map('n', 'gd', vim.lsp.buf.definition, { desc = 'Go to definition' })
-map('n', 'gi', vim.lsp.buf.implementation, { desc = 'Go to implementation'})
+map('n', 'gi', vim.lsp.buf.implementation, { desc = 'Go to implementation' })
 map('n', 'gr', vim.lsp.buf.references, bufopts, { desc = 'Show references' })
+
+-- neotest-go
+map('n', '<Leader>rt', ':lua require("neotest").run.run()<CR>', { desc = 'Run test' })
 
 -- ペースト後に自動インデント整形
 map("n", "p", "p=`]", { desc = "Paste and auto-indent" })
