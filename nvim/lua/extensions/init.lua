@@ -138,6 +138,12 @@ local plugins = {
     },
   },
   {
+    "b0o/nvim-tree-preview.lua",
+    config = function()
+      require("nvim-tree-preview").setup()
+    end
+  },
+  {
     "williamboman/mason.nvim",
     config = function() require 'extensions.mason' end,
   },
