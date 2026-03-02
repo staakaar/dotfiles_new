@@ -3,27 +3,13 @@ local plugins = {
     "EdenEast/nightfox.nvim",
     lazy = false,
     priority = 1000, -- 他のプラグインより先にロード
-    config = function()
-      require("nightfox").setup({
-        options = {
-          transparent = false,
-          terminal_colors = true,
-          styles = {
-            comments = "italic",
-            keywords = "bold",
-            functions = "NONE",
-            types = "italic,bold",
-          },
-        },
-      })
-      vim.cmd("colorscheme nightfox") -- テーマ選択
-    end,
+    config = function() require "extensions.nightfox" end,
   },
   {
     'nvim-treesitter/nvim-treesitter',
     build = ":TSUpdate",
     config = function()
-      require('nvim-treesitter.configs').setup({
+      require('nvim-treesitter').setup({
         ensure_installed = { 'go', 'ruby', 'rust', 'java', 'vue', 'markdown', 'lua', 'typescript', 'javascript', 'json', 'yaml', 'html', 'css', 'bash', 'python', 'markdown', 'scala' },
         auto_install = true,
         highlight = {
