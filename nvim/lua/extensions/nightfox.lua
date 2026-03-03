@@ -17,17 +17,17 @@ require('nightfox').setup({
         tritan = 0,                    -- Severity [0,1] for tritan (blue)
       },
     },
-    styles = {           -- Style to be applied to different syntax groups
-      comments = "NONE", -- Value is any valid attr-list value `:help attr-list`
+    styles = {             -- Style to be applied to different syntax groups
+      comments = "italic", -- Value is any valid attr-list value `:help attr-list`
       conditionals = "NONE",
       constants = "NONE",
       functions = "NONE",
-      keywords = "NONE",
+      keywords = "bold",
       numbers = "NONE",
       operators = "NONE",
       strings = "NONE",
-      types = "NONE",
-      variables = "NONE",
+      types = "italic,bold",
+      variables = "bold",
     },
     inverse = { -- Inverse highlight for different types
       match_paren = false,
@@ -36,10 +36,26 @@ require('nightfox').setup({
     },
     modules = { -- List of various plugins and additional options
       -- ...
+      treesitter = true,
+      native_lsp = {
+        enable     = true,
+        background = true,
+      },
+      diagnostic = {
+        enable     = true,
+        background = true,
+      },
     },
   },
   palettes = {},
-  specs = {},
+  specs = {
+    nightfox = {
+      syntax = {
+        keyword = "orange",
+        variable = "magenta"
+      }
+    }
+  },
   groups = {},
 })
 

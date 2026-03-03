@@ -7,7 +7,7 @@ local config = wezterm.config_builder()
 
 config.color_scheme = 'nightfox'
 config.window_background_opacity = 0.93
-config.color_scheme_dirs = { 'https://github.com/EdenEast/nightfox.nvim/blob/main/extra/nightfox/wezterm.toml' }
+-- config.color_scheme_dirs = { 'https://github.com/EdenEast/nightfox.nvim/blob/main/extra/nightfox/wezterm.toml' }
 config.initial_cols = 120
 config.initial_rows = 28
 config.font_size = 12
