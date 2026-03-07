@@ -31,6 +31,13 @@ vim.api.nvim_set_option('inccommand', 'split')
 --
 vim.api.nvim_create_user_command('InitLua', function() vim.cmd.edit(vim.fn.stdpath('config') .. '/init.lua') end, {})
 
+vim.treesitter.start = (function(wrapped)
+  return function(bufnr, lang)
+    lang = lang or vim.fn.getbufvar(bufnr or '', '&filetype')
+    pcall(wrapped, bufnr, lang)
+  end
+end)(vim.treesitter.start)
+
 vim.api.nvim_create_autocmd("BufWritePre", {
   pattern = "*.go",
   callback = function()
@@ -53,4 +60,3 @@ vim.api.nvim_create_autocmd("BufWritePre", {
     vim.lsp.buf.format({ async = false })
   end
 })
-

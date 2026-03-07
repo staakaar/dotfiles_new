@@ -8,26 +8,28 @@ local plugins = {
   {
     'nvim-treesitter/nvim-treesitter',
     build = ":TSUpdate",
+    lazy = false,
     config = function()
       require('nvim-treesitter').setup({
+        install_dir = vim.fn.stdpath('data') .. '/site',
         ensure_installed = { 'go', 'ruby', 'rust', 'java', 'vue', 'markdown', 'lua', 'typescript', 'javascript', 'json', 'yaml', 'html', 'css', 'bash', 'python', 'markdown', 'scala' },
         auto_install = true,
         highlight = {
-          enabled = true,
-          addtional_vim_regex_highlighting = false,
+          enable = true,
+          additional_vim_regex_highlighting = false,
         },
         indent = {
-          enabled = true,
+          enable = true,
         }
       })
     end,
     event = { 'BufNewFile', 'BufReadPre' },
   },
-  {
-    'rmehri01/onenord.nvim',
-    event = { 'VimEnter' },
-    priority = 1000,
-  },
+  -- {
+  --   'rmehri01/onenord.nvim',
+  --   event = { 'VimEnter' },
+  --   priority = 1000,
+  -- },
   {
     'nvim-lualine/lualine.nvim',
     event = { 'VimEnter' },
