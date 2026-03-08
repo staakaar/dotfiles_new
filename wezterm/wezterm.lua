@@ -3,6 +3,7 @@ local keybind = require 'keybinds'
 local config = wezterm.config_builder()
 
 config.color_scheme = 'nightfox'
+config.term = 'xterm-256color'
 config.window_background_opacity = 0.93
 config.color_scheme_dirs = { wezterm.home_dir .. '/.config/wezterm/colors/wezterm.toml' }
 config.initial_cols = 120
@@ -32,14 +33,6 @@ config.colors = {
     inactive_tab_edge = '#575757',
   }
 }
-
-wezterm.on("gui-startup", function()
-  for name, _ in pairs(wezterm.get_builtin_color_schemes()) do
-    if name:lower():find("fox") then
-      wezterm.log_info("Found: " .. name)
-    end
-  end
-end)
 
 -- keybinds
 config.disable_default_key_bindings = true

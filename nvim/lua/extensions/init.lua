@@ -11,26 +11,28 @@ local plugins = {
     config = function() require "extensions.dashboard" end,
     dependencies = { { 'nvim-tree/nvim-web-devicons' } }
   },
-  -- {
-  --   'nvim-treesitter/nvim-treesitter',
-  --   build = ":TSUpdate",
-  --   lazy = false,
-  --   config = function()
-  --     require('nvim-treesitter').setup({
-  --       install_dir = vim.fn.stdpath('data') .. '/site',
-  --       ensure_installed = { 'go', 'ruby', 'rust', 'java', 'vue', 'markdown', 'lua', 'typescript', 'javascript', 'json', 'yaml', 'html', 'css', 'bash', 'python', 'markdown', 'scala' },
-  --       auto_install = true,
-  --       highlight = {
-  --         enable = true,
-  --         additional_vim_regex_highlighting = false,
-  --       },
-  --       indent = {
-  --         enable = true,
-  --       }
-  --     })
-  --   end,
-  --   event = { 'BufNewFile', 'BufReadPre' },
-  -- },
+  {
+    'nvim-treesitter/nvim-treesitter',
+    build = ":TSUpdate",
+    lazy = false,
+    config = function()
+      require('nvim-treesitter.configs').setup({
+        ensure_installed = {
+          "go", "java", "ruby",
+          "lua", "bash", "json", "yaml", "markdown",
+          "typescript", "javascript", "rust", "python",
+          "html", "css", "vue",
+        },
+        auto_install = true,
+        highlight = {
+          enable = true,
+        },
+        indent = {
+          enable = true,
+        }
+      })
+    end,
+  },
   -- {
   --   'rmehri01/onenord.nvim',
   --   event = { 'VimEnter' },
