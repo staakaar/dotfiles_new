@@ -6,30 +6,64 @@ local plugins = {
     config = function() require "extensions.nightfox" end,
   },
   {
-    'nvim-treesitter/nvim-treesitter',
-    build = ":TSUpdate",
-    lazy = false,
-    config = function()
-      require('nvim-treesitter').setup({
-        install_dir = vim.fn.stdpath('data') .. '/site',
-        ensure_installed = { 'go', 'ruby', 'rust', 'java', 'vue', 'markdown', 'lua', 'typescript', 'javascript', 'json', 'yaml', 'html', 'css', 'bash', 'python', 'markdown', 'scala' },
-        auto_install = true,
-        highlight = {
-          enable = true,
-          additional_vim_regex_highlighting = false,
-        },
-        indent = {
-          enable = true,
-        }
-      })
-    end,
-    event = { 'BufNewFile', 'BufReadPre' },
+    'nvimdev/dashboard-nvim',
+    event = 'VimEnter',
+    config = function() require "extensions.dashboard" end,
+    dependencies = { { 'nvim-tree/nvim-web-devicons' } }
   },
+  -- {
+  --   'nvim-treesitter/nvim-treesitter',
+  --   build = ":TSUpdate",
+  --   lazy = false,
+  --   config = function()
+  --     require('nvim-treesitter').setup({
+  --       install_dir = vim.fn.stdpath('data') .. '/site',
+  --       ensure_installed = { 'go', 'ruby', 'rust', 'java', 'vue', 'markdown', 'lua', 'typescript', 'javascript', 'json', 'yaml', 'html', 'css', 'bash', 'python', 'markdown', 'scala' },
+  --       auto_install = true,
+  --       highlight = {
+  --         enable = true,
+  --         additional_vim_regex_highlighting = false,
+  --       },
+  --       indent = {
+  --         enable = true,
+  --       }
+  --     })
+  --   end,
+  --   event = { 'BufNewFile', 'BufReadPre' },
+  -- },
   -- {
   --   'rmehri01/onenord.nvim',
   --   event = { 'VimEnter' },
   --   priority = 1000,
   -- },
+  {
+    "NeogitOrg/neogit",
+    lazy = true,
+    dependencies = {
+      "nvim-lua/plenary.nvim", -- required
+
+      -- Only one of these is needed.
+      "sindrets/diffview.nvim",   -- optional
+      "esmuellert/codediff.nvim", -- optional
+
+      -- Only one of these is needed.
+      "nvim-telescope/telescope.nvim", -- optional
+      "ibhagwan/fzf-lua",              -- optional
+      "nvim-mini/mini.pick",           -- optional
+      "folke/snacks.nvim",             -- optional
+    },
+    cmd = "Neogit",
+    keys = {
+      { "<leader>gg", "<cmd>Neogit<cr>", desc = "Show Neogit UI" }
+    }
+  },
+  {
+    "lukas-reineke/indent-blankline.nvim",
+    main = "ibl",
+    ---@module "ibl"
+    ---@type ibl.config
+    opts = {},
+  },
   {
     'nvim-lualine/lualine.nvim',
     event = { 'VimEnter' },
@@ -145,7 +179,7 @@ local plugins = {
           -- Ruby
           "solargraph",
           -- Go
-          -- "gopls",
+          "gopls",
           -- Rust
           "rust_analyzer",
           -- Elixir
@@ -219,6 +253,8 @@ local plugins = {
       lspconfig.jdtls.setup({ on_attach = on_attach })
       lspconfig.gopls.setup({
         on_attach = on_attach,
+        filetypes = { "go", "gomod", "gowork", "gotmpl" },
+        cmd = { "gopls" },
         settings = {
           gopls = {
             analyses = {

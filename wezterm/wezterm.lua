@@ -1,13 +1,10 @@
 local wezterm = require 'wezterm'
-local wezterm_config_nvim = wezterm.plugin.require 'https://github.com/winter-again/wezterm-config.nvim'
 local keybind = require 'keybinds'
 local config = wezterm.config_builder()
 
--- nvim import
-
 config.color_scheme = 'nightfox'
 config.window_background_opacity = 0.93
--- config.color_scheme_dirs = { 'https://github.com/EdenEast/nightfox.nvim/blob/main/extra/nightfox/wezterm.toml' }
+config.color_scheme_dirs = { wezterm.home_dir .. '/.config/wezterm/colors/wezterm.toml' }
 config.initial_cols = 120
 config.initial_rows = 28
 config.font_size = 12
@@ -36,6 +33,14 @@ config.colors = {
   }
 }
 
+wezterm.on("gui-startup", function()
+  for name, _ in pairs(wezterm.get_builtin_color_schemes()) do
+    if name:lower():find("fox") then
+      wezterm.log_info("Found: " .. name)
+    end
+  end
+end)
+
 -- keybinds
 config.disable_default_key_bindings = true
 -- keybind
@@ -43,5 +48,4 @@ config.keys = keybind.keys
 config.key_tables = keybind.key_tables
 config.leader = { key = ",", mods = "CTRL", timeout_milliseconds = 2000 }
 
--- wezterm_config_nvim.apply_to_config(config)
 return config
