@@ -65,3 +65,41 @@ map('n', '<Leader>rt', ':lua require("neotest").run.run()<CR>', { desc = 'Run te
 -- ペースト後に自動インデント整形
 map("n", "p", "p=`]", { desc = "Paste and auto-indent" })
 map("n", "P", "P=`[", { desc = "Paste above and auto-indent" })
+
+-- barbar
+-- バッファ移動
+map("n", "<A-,>", "<Cmd>BufferPrevious<CR>", { noremap = true, silent = true, desc = "Previous buffer" })
+map("n", "<A-.>", "<Cmd>BufferNext<CR>", { noremap = true, silent = true, desc = "Next buffer" })
+
+-- バッファ並び替え
+map("n", "<A-<>", "<Cmd>BufferMovePrevious<CR>", { noremap = true, silent = true, desc = "Move buffer prev" })
+map("n", "<A->>", "<Cmd>BufferMoveNext<CR>", { noremap = true, silent = true, desc = "Move buffer next" })
+
+-- バッファ番号で直接移動
+map("n", "<A-1>", "<Cmd>BufferGoto 1<CR>", { noremap = true, silent = true, desc = "Buffer 1" })
+map("n", "<A-2>", "<Cmd>BufferGoto 2<CR>", { noremap = true, silent = true, desc = "Buffer 2" })
+map("n", "<A-3>", "<Cmd>BufferGoto 3<CR>", { noremap = true, silent = true, desc = "Buffer 3" })
+map("n", "<A-4>", "<Cmd>BufferGoto 4<CR>", { noremap = true, silent = true, desc = "Buffer 4" })
+map("n", "<A-5>", "<Cmd>BufferGoto 5<CR>", { noremap = true, silent = true, desc = "Buffer 5" })
+map("n", "<A-6>", "<Cmd>BufferGoto 6<CR>", { noremap = true, silent = true, desc = "Buffer 6" })
+map("n", "<A-7>", "<Cmd>BufferGoto 7<CR>", { noremap = true, silent = true, desc = "Buffer 7" })
+map("n", "<A-8>", "<Cmd>BufferGoto 8<CR>", { noremap = true, silent = true, desc = "Buffer 8" })
+map("n", "<A-9>", "<Cmd>BufferGoto 9<CR>", { noremap = true, silent = true, desc = "Buffer 9" })
+map("n", "<A-0>", "<Cmd>BufferLast<CR>", { noremap = true, silent = true, desc = "Last buffer" })
+
+-- ピン留め
+map("n", "<A-p>", "<Cmd>BufferPin<CR>", { noremap = true, silent = true, desc = "Pin/Unpin buffer" })
+
+-- バッファを閉じる
+map("n", "<A-c>", "<Cmd>BufferClose<CR>", { noremap = true, silent = true, desc = "Close buffer" })
+
+-- バッファピック
+map("n", "<C-p>", "<Cmd>BufferPick<CR>", { noremap = true, silent = true, desc = "Pick buffer" })
+map("n", "<C-S-p>", "<Cmd>BufferPickDelete<CR>", { noremap = true, silent = true, desc = "Pick and delete buffer" })
+
+-- バッファ並び替え
+map("n", "<Space>bb", "<Cmd>BufferOrderByBufferNumber<CR>", { noremap = true, silent = true, desc = "Order by number" })
+map("n", "<Space>bn", "<Cmd>BufferOrderByName<CR>", { noremap = true, silent = true, desc = "Order by name" })
+map("n", "<Space>bd", "<Cmd>BufferOrderByDirectory<CR>", { noremap = true, silent = true, desc = "Order by directory" })
+map("n", "<Space>bl", "<Cmd>BufferOrderByLanguage<CR>", { noremap = true, silent = true, desc = "Order by language" })
+map("n", "<Space>bw", "<Cmd>BufferOrderByWindowNumber<CR>", { noremap = true, silent = true, desc = "Order by window" })

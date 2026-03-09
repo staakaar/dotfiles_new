@@ -16,7 +16,7 @@ local plugins = {
     build = ":TSUpdate",
     lazy = false,
     config = function()
-      require('nvim-treesitter.configs').setup({
+      require('nvim-treesitter.config').setup({
         ensure_installed = {
           "go", "java", "ruby",
           "lua", "bash", "json", "yaml", "markdown",
@@ -32,6 +32,34 @@ local plugins = {
         }
       })
     end,
+  },
+  {
+    'romgrk/barbar.nvim',
+    dependencies = {
+      'lewis6991/gitsigns.nvim',     -- OPTIONAL: for git status
+      'nvim-tree/nvim-web-devicons', -- OPTIONAL: for file icons
+    },
+    init = function() vim.g.barbar_auto_setup = false end,
+    config = function() require 'extensions.barbar' end,
+    opts = {
+      -- lazy.nvim will automatically call setup for you. put your options here, anything missing will use the default:
+      -- animation = true,
+      -- insert_at_start = true,
+      -- …etc.
+    },
+    version = '^1.0.0', -- optional: only update when a new 1.x version is released
+  },
+  {
+    'akinsho/toggleterm.nvim',
+    version = "*",
+    config = function() require 'extensions.toggleterm' end,
+  },
+  {
+    'windwp/nvim-autopairs',
+    event = "InsertEnter",
+    config = true
+    -- use opts = {} for passing setup options
+    -- this is equivalent to setup({}) function
   },
   -- {
   --   'rmehri01/onenord.nvim',
@@ -280,6 +308,16 @@ local plugins = {
       -- Kotlin
       lspconfig.kotlin_language_server.setup({ on_attach = on_attach })
     end,
+  },
+  {
+    'nvimdev/lspsaga.nvim',
+    config = function()
+      require('lspsaga').setup({})
+    end,
+    dependencies = {
+      'nvim-treesitter/nvim-treesitter', -- optional
+      'nvim-tree/nvim-web-devicons',     -- optional
+    }
   },
   {
     "hrsh7th/nvim-cmp",
