@@ -6,3 +6,5 @@ nvim/lazy-lock.json
 zsh/.zsh_history
 **/*.zwc
 zsh/.zsh_history
+pack/
+github-copilot/
