@@ -60,3 +60,27 @@ vim.api.nvim_create_autocmd("BufWritePre", {
     vim.lsp.buf.format({ async = false })
   end
 })
+
+vim.api.nvim_create_autocmd("VimEnter", {
+  callback = function()
+    local arg = vim.fn.argv(0)
+    if vim.fn.isdirectory(arg) == 1 then
+      vim.cmd("cd " .. arg)  -- そのディレクトリに移動
+      vim.schedule(function()
+        vim.cmd("Dashboard") -- dashboardを表示
+      end)
+    end
+  end,
+})
+
+-- Dashboardバッファではインデントラインを無効化
+vim.api.nvim_create_autocmd("FileType", {
+  pattern = "dashboard",
+  callback = function()
+    -- indent-blankline v3 の場合
+    local ok, ibl = pcall(require, "ibl")
+    if ok then
+      ibl.setup_buffer(0, { enabled = false })
+    end
+  end,
+})
