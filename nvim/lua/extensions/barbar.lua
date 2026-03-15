@@ -120,7 +120,7 @@ require 'barbar'.setup {
       align = 'center', -- *optionally* specify an alignment (either 'left', 'center', or 'right')
     },
     -- Or, specify the event which the sidebar executes when leaving:
-    ['neo-tree'] = { event = 'BufWipeout' },
+    -- ['neo-tree'] = { event = 'BufWipeout' },
     -- Or, specify all three
     Outline = { event = 'BufWinLeave', text = 'symbols-outline', align = 'right' },
   },
