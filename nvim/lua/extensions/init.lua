@@ -22,24 +22,33 @@ local plugins = {
   {
     'nvim-treesitter/nvim-treesitter',
     build = ":TSUpdate",
-    lazy = false,
-    config = function()
-      require('nvim-treesitter.config').setup({
-        ensure_installed = {
-          "go", "java", "ruby",
-          "lua", "bash", "json", "yaml", "markdown",
-          "typescript", "javascript", "rust", "python",
-          "html", "css", "vue",
-        },
-        auto_install = true,
-        highlight = {
-          enable = true,
-        },
-        indent = {
-          enable = true,
-        }
-      })
-    end,
+    branch = "master",
+    dependencies = {
+      'nvim-treesitter/nvim-treesitter-textobjects',
+    },
+    main = "nvim-treesitter",
+    opts = {
+      ensure_installed = {
+        "go", "java", "ruby",
+        "lua", "bash", "json", "yaml", "markdown",
+        "typescript", "javascript", "rust", "python",
+        "html", "css", "vue", "gomod", "gowork", "gosum", "tsx", "vim", "dockerfile", "sql", "kotlin"
+      },
+      -- auto_install = true,
+      highlight = {
+        enable = true,
+      },
+      indent = {
+        enable = true,
+      },
+      folds = {
+        enable = true,
+      },
+    },
+  },
+  {
+    'nvim-treesitter/nvim-treesitter-textobjects',
+    event = 'CursorMoved',
   },
   {
     'romgrk/barbar.nvim',
@@ -47,7 +56,7 @@ local plugins = {
       'lewis6991/gitsigns.nvim',     -- OPTIONAL: for git status
       'nvim-tree/nvim-web-devicons', -- OPTIONAL: for file icons
     },
-    init = function() vim.g.barbar_auto_setup = false end,
+    -- init = function() vim.g.barbar_auto_setup = false end,
     config = function() require 'extensions.barbar' end,
     version = '^1.0.0', -- optional: only update when a new 1.x version is released
   },
@@ -63,11 +72,6 @@ local plugins = {
     -- use opts = {} for passing setup options
     -- this is equivalent to setup({}) function
   },
-  -- {
-  --   'rmehri01/onenord.nvim',
-  --   event = { 'VimEnter' },
-  --   priority = 1000,
-  -- },
   {
     "NeogitOrg/neogit",
     lazy = true,
@@ -205,17 +209,17 @@ local plugins = {
       { "nvim-tree/nvim-web-devicons",              opts = {},     build = 'make' },
     },
   },
-  {
-    "nvim-tree/nvim-tree.lua",
-    version = "*",
-    lazy = false,
-    dependencies = {
-      "nvim-tree/nvim-web-devicons",
-    },
-    config = function()
-      require("nvim-tree").setup {}
-    end,
-  },
+  -- {
+  --   "nvim-tree/nvim-tree.lua",
+  --   version = "*",
+  --   lazy = false,
+  --   dependencies = {
+  --     "nvim-tree/nvim-web-devicons",
+  --   },
+  --   config = function()
+  --     require("nvim-tree").setup {}
+  --   end,
+  -- },
   {
     "antosha417/nvim-lsp-file-operations",
     dependencies = {
@@ -229,24 +233,24 @@ local plugins = {
       require("lsp-file-operations").setup()
     end,
   },
-  {
-    'kyazdani42/nvim-tree.lua',
-    dependencies = {
-      {
-        'b0o/nvim-tree-preview.lua',
-        dependencies = {
-          'nvim-lua/plenary.nvim',
-          '3rd/image.nvim', -- Optional, for previewing images
-        },
-      },
-    },
-  },
-  {
-    "b0o/nvim-tree-preview.lua",
-    config = function()
-      require("nvim-tree-preview").setup()
-    end
-  },
+  -- {
+  --   'kyazdani42/nvim-tree.lua',
+  --   dependencies = {
+  --     {
+  --       'b0o/nvim-tree-preview.lua',
+  --       dependencies = {
+  --         'nvim-lua/plenary.nvim',
+  --         '3rd/image.nvim', -- Optional, for previewing images
+  --       },
+  --     },
+  --   },
+  -- },
+  -- {
+  --   "b0o/nvim-tree-preview.lua",
+  --   config = function()
+  --     require("nvim-tree-preview").setup()
+  --   end
+  -- },
   {
     "williamboman/mason.nvim",
     config = function() require 'extensions.mason' end,

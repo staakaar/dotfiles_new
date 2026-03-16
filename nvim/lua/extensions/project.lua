@@ -1,6 +1,4 @@
-require("nvim-tree").setup({
-  detection_methods = { "pattern", "lsp" },
-  patterns = { ".git", "Makefile", "package.json", "go.mod", "Cargo.toml" },
+require("project_nvim").setup({
   sync_root_with_cwd = true,
   respect_buf_cwd = true,
   update_focused_file = {
@@ -19,7 +17,7 @@ require("nvim-tree").setup({
 
   -- All the patterns used to detect root dir, when **"pattern"** is in
   -- detection_methods
-  patterns = { ".git", "_darcs", ".hg", ".bzr", ".svn", "Makefile", "package.json" },
+  patterns = { ".git", "_darcs", ".hg", ".bzr", ".svn", "Makefile", "package.json", "go.mod", "Cargo.toml" },
 
   -- Table of lsp clients to ignore by name
   -- eg: { "efm", ... }
@@ -44,7 +42,7 @@ require("nvim-tree").setup({
 
   -- Path where project.nvim will store the project history for use in
   -- telescope
-  -- datapath = vim.fn.stdpath("data"),
+  datapath = vim.fn.stdpath("data"),
 })
 
 require('telescope').load_extension('projects')

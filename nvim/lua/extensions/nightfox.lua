@@ -56,8 +56,14 @@ require('nightfox').setup({
       }
     }
   },
-  groups = {},
+  groups = {
+    -- nightfox = {
+    --   ["@keyword"]          = { fg = "orange" },
+    --   ["@variable"]         = { fg = "magenta" },
+    --   ["@variable.builtin"] = { fg = "magenta" },
+    -- },
+  },
 })
 
--- setup must be called before loading
+vim.fn.system("rm -rf " .. vim.fn.stdpath("cache") .. "/nightfox")
 vim.cmd("colorscheme nightfox")

@@ -47,8 +47,8 @@ map("i", "<C-y>", "<C-r>\"", { desc = "Yank (paste last deleted)" })
 map("i", "<C-t>", "<C-o>xp", { desc = "Transpose chars" })
 
 -- nvim-tree
-map("n", "<leader>tt", "<cmd>NvimTreeToggle<CR>", { desc = "Toggle nvim-tree" })
-map("n", "<leader>tf", "<cmd>NvimTreeFindFile<CR>", { desc = "Find current file in nvim-tree" })
+-- map("n", "<leader>tt", "<cmd>NvimTreeToggle<CR>", { desc = "Toggle nvim-tree" })
+-- map("n", "<leader>tf", "<cmd>NvimTreeFindFile<CR>", { desc = "Find current file in nvim-tree" })
 
 -- Oil.vim
 map("n", "-", "<CMD>Oil<CR>", { desc = "Open parent directory" })

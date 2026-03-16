@@ -1,13 +1,13 @@
 require("oil").setup({
   -- Oil will take over directory buffers (e.g. `vim .` or `:e src/`)
   -- Set to false if you want some other plugin (e.g. netrw) to open when you edit directories.
-  default_file_explorer = false,
+  default_file_explorer = true,
   -- Id is automatically added at the beginning, and name at the end
   -- See :help oil-columns
   columns = {
     "icon",
-    -- "permissions",
-    -- "size",
+    "permissions",
+    "size",
     -- "mtime",
   },
   -- Buffer-local options to use for oil buffers
@@ -50,7 +50,7 @@ require("oil").setup({
   -- Set to `false` to disable, or "name" to keep it on the file names
   constrain_cursor = "editable",
   -- Set to true to watch the filesystem for changes and reload oil
-  watch_for_changes = false,
+  watch_for_changes = true,
   -- Keymaps in oil buffer. Can be any value that `vim.keymap.set` accepts OR a table of keymap
   -- options with a `callback` (e.g. { callback = function() ... end, desc = "", mode = "n" })
   -- Additionally, if it is a string that matches "actions.<name>",
@@ -127,21 +127,24 @@ require("oil").setup({
     -- Padding around the floating window
     padding = 2,
     -- max_width and max_height can be integers or a float between 0 and 1 (e.g. 0.4 for 40%)
-    max_width = 0,
-    max_height = 0,
-    border = nil,
+    max_width = 0.8,
+    max_height = 0.8,
+    border = 'rounded',
     win_options = {
       winblend = 0,
     },
     -- optionally override the oil buffers window title with custom function: fun(winid: integer): string
     get_win_title = nil,
     -- preview_split: Split direction: "auto", "left", "right", "above", "below".
-    preview_split = "auto",
+    preview_split = "right",
     -- This is the config that will be passed to nvim_open_win.
     -- Change values here to customize the layout
     override = function(conf)
       return conf
     end,
+  },
+  layout = {
+    max_outline_level = 2,
   },
   -- Configuration for the file preview window
   preview_win = {
@@ -156,14 +159,13 @@ require("oil").setup({
     -- Window-local options to use for preview window buffers
     win_options = {},
   },
-  -- Configuration for the floating action confirmation window
   confirmation = {
     -- Width dimensions can be integers or a float between 0 and 1 (e.g. 0.4 for 40%)
     -- min_width and max_width can be a single value or a list of mixed integer/float types.
     -- max_width = {100, 0.8} means "the lesser of 100 columns or 80% of total"
     max_width = 0.9,
     -- min_width = {40, 0.4} means "the greater of 40 columns or 40% of total"
-    min_width = { 40, 0.4 },
+    min_width = { 50, 0.5 },
     -- optionally define an integer/float for the exact width of the preview window
     width = nil,
     -- Height dimensions can be integers or a float between 0 and 1 (e.g. 0.4 for 40%)
@@ -201,4 +203,17 @@ require("oil").setup({
   keymaps_help = {
     border = nil,
   },
+})
+
+-- ★ oil バッファを開いたら自動でプレビューを表示
+vim.api.nvim_create_autocmd("User", {
+  pattern = "OilEnter",
+  callback = function(args)
+    local oil = require("oil")
+    -- oil バッファが有効かつ通常バッファの場合のみプレビューを開く
+    if vim.api.nvim_buf_is_valid(args.data.buf)
+        and vim.bo[args.data.buf].filetype == "oil" then
+      oil.open_preview()
+    end
+  end,
 })
