@@ -7,6 +7,18 @@ bindkey -e
 eval "$(/opt/homebrew/bin/brew shellenv)"
 source $HOME/.local/bin/antigen.zsh
 antigen use oh-my-zsh
+antigen bundle <<EOBUNDLES
+    git
+
+    # Syntax highlighting bundle.
+    zsh-users/zsh-syntax-highlighting
+
+    # Fish-like auto suggestions
+    zsh-users/zsh-autosuggestions
+
+    # Extra zsh completions
+    zsh-users/zsh-completions
+EOBUNDLES
 antigen theme robbyrussell
 antigen apply
 

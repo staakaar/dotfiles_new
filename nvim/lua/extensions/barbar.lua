@@ -29,13 +29,13 @@ require 'barbar'.setup {
   focus_on_close = 'left',
 
   -- Hide inactive buffers and file extensions. Other options are `alternate`, `current`, and `visible`.
-  hide = { extensions = true, inactive = true },
+  hide = { extensions = false, inactive = false },
 
   -- Disable highlighting alternate buffers
   highlight_alternate = false,
 
   -- Disable highlighting file icons in inactive buffers
-  highlight_inactive_file_icons = false,
+  highlight_inactive_file_icons = true,
 
   -- Enable highlighting visible buffers
   highlight_visible = true,
@@ -48,7 +48,7 @@ require 'barbar'.setup {
     button = '',
     -- Enables / disables diagnostic symbols
     diagnostics = {
-      [vim.diagnostic.severity.ERROR] = { enabled = true, icon = 'ﬀ' },
+      [vim.diagnostic.severity.ERROR] = { enabled = true, icon = '' },
       [vim.diagnostic.severity.WARN] = { enabled = false },
       [vim.diagnostic.severity.INFO] = { enabled = false },
       [vim.diagnostic.severity.HINT] = { enabled = true },
@@ -122,7 +122,7 @@ require 'barbar'.setup {
     -- Or, specify the event which the sidebar executes when leaving:
     -- ['neo-tree'] = { event = 'BufWipeout' },
     -- Or, specify all three
-    Outline = { event = 'BufWinLeave', text = 'symbols-outline', align = 'right' },
+    -- Outline = { event = 'BufWinLeave', text = 'symbols-outline', align = 'right' },
   },
 
   -- New buffer letters are assigned in this order. This order is

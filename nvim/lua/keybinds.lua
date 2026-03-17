@@ -72,6 +72,15 @@ map('n', '<Leader>rt', ':lua require("neotest").run.run()<CR>', { desc = 'Run te
 map("n", "p", "p=`]", { desc = "Paste and auto-indent" })
 map("n", "P", "P=`[", { desc = "Paste above and auto-indent" })
 
+map("n", "<leader>tn", function()
+  vim.cmd("enew | terminal")
+  vim.cmd("startinsert")
+end, { noremap = true, silent = true, desc = "Terminal new buffer" })
+
+-- ターミナルモードからノーマルモードに戻る
+map("t", "<Esc><Esc>", "<C-\\><C-n>",
+  { noremap = true, silent = true, desc = "Terminal normal mode" })
+
 -- barbar
 -- 前/次のバッファ移動
 map("n", "<C-j>", "<Cmd>BufferNext<CR>", { noremap = true, silent = true, desc = "Next buffer" })

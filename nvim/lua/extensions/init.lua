@@ -3,6 +3,9 @@ local plugins = {
     "EdenEast/nightfox.nvim",
     lazy = false,
     priority = 1000, -- 他のプラグインより先にロード
+    dependencies = {
+      "nvim-treesitter/nvim-treesitter",
+    },
     config = function() require "extensions.nightfox" end,
   },
   {
@@ -22,6 +25,7 @@ local plugins = {
   {
     'nvim-treesitter/nvim-treesitter',
     build = ":TSUpdate",
+    lazy = false,
     branch = "master",
     dependencies = {
       'nvim-treesitter/nvim-treesitter-textobjects',
@@ -34,14 +38,11 @@ local plugins = {
         "typescript", "javascript", "rust", "python",
         "html", "css", "vue", "gomod", "gowork", "gosum", "tsx", "vim", "dockerfile", "sql", "kotlin"
       },
-      -- auto_install = true,
       highlight = {
         enable = true,
+        additional_vim_regex_highlighting = false,
       },
       indent = {
-        enable = true,
-      },
-      folds = {
         enable = true,
       },
     },

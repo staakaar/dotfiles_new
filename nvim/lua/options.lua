@@ -21,6 +21,9 @@ vim.opt.softtabstop = 2    -- Tab キー押下時の幅
 vim.opt.expandtab = true   -- タブをスペースに変換
 vim.opt.smartindent = true -- 波括弧の改行後に自動インデント
 vim.opt.autoindent = true  -- 前の行のインデントを維持
+vim.opt.foldmethod = "expr"
+vim.opt.foldexpr = "nvim_treesitter#foldexpr()"
+vim.opt.foldenable = false
 
 -- global
 vim.api.nvim_set_option('scrolloff', 2)

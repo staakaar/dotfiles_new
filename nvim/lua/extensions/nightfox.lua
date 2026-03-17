@@ -41,6 +41,9 @@ require('nightfox').setup({
         enable     = true,
         background = true,
       },
+      lazy_nvim = {
+        enable = true,
+      },
       diagnostic = {
         enable     = true,
         background = true,
