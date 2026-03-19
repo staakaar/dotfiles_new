@@ -28,7 +28,7 @@ config.window_frame = {
 }
 
 config.colors = {
-  scrollbar_thumb = 'white',
+  scrollbar_thumb = 'gray',
   tab_bar = {
     inactive_tab_edge = '#575757',
   }

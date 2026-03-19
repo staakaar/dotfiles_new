@@ -64,6 +64,14 @@ vim.api.nvim_create_autocmd("BufWritePre", {
   end
 })
 
+-- vim.api.nvim_create_autocmd({ "VimEnter", "ColorSchemePre" }, {
+--   callback = function()
+--     if vim.g.colors_name ~= "nightfox" then
+--       vim.cmd("colorscheme nightfox")
+--     end
+--   end,
+-- })
+
 vim.api.nvim_create_autocmd("VimEnter", {
   callback = function()
     local arg = vim.fn.argv(0)

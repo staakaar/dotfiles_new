@@ -39,7 +39,7 @@ local plugins = {
         "html", "css", "vue", "gomod", "gowork", "gosum", "tsx", "vim", "dockerfile", "sql", "kotlin"
       },
       highlight = {
-        enable = true,
+        enable = false,
         additional_vim_regex_highlighting = false,
       },
       indent = {
@@ -61,11 +61,11 @@ local plugins = {
     config = function() require 'extensions.barbar' end,
     version = '^1.0.0', -- optional: only update when a new 1.x version is released
   },
-  {
-    'akinsho/toggleterm.nvim',
-    version = "*",
-    config = function() require 'extensions.toggleterm' end,
-  },
+  -- {
+  --   'akinsho/toggleterm.nvim',
+  --   version = "*",
+  --   config = function() require 'extensions.toggleterm' end,
+  -- },
   {
     'windwp/nvim-autopairs',
     event = "InsertEnter",
@@ -121,29 +121,6 @@ local plugins = {
       { "<leader>ad", "<cmd>ClaudeCodeDiffDeny<cr>",   desc = "Deny diff" },
     },
   },
-  -- {
-  --   "folke/snacks.nvim",
-  --   priority = 1000,
-  --   lazy = false,
-  --   ---@type snacks.Config
-  --   opts = {
-  --     -- your configuration comes here
-  --     -- or leave it empty to use the default settings
-  --     -- refer to the configuration section below
-  --     bigfile = { enabled = true },
-  --     dashboard = { enabled = false },
-  --     explorer = { enabled = true },
-  --     indent = { enabled = true },
-  --     input = { enabled = true },
-  --     picker = { enabled = true },
-  --     notifier = { enabled = true },
-  --     quickfile = { enabled = false },
-  --     scope = { enabled = true },
-  --     scroll = { enabled = true },
-  --     statuscolumn = { enabled = true },
-  --     words = { enabled = true },
-  --   },
-  -- },
   {
     "lukas-reineke/indent-blankline.nvim",
     main = "ibl",
@@ -256,6 +233,37 @@ local plugins = {
     "williamboman/mason.nvim",
     config = function() require 'extensions.mason' end,
   },
+  {
+    "mason-org/mason.nvim",
+    opts = { ensure_installed = { "goimports", "gofumpt", "gomodifytags", "impl", "golangci-lint", "delve" } },
+  },
+  {
+    "leoluz/nvim-dap-go",
+    dependencies = {
+      "mfussenegger/nvim-dap", -- ★ 明示的にdapに依存させる
+    },
+    opts = {},
+    config = function()
+      require("dap-go").setup()
+    end,
+  },
+  {
+    "fredrikaverpil/neotest-golang",
+  },
+  {
+    "mfussenegger/nvim-dap",
+    optional = false,
+    dependencies = {
+      {
+        "mason-org/mason.nvim",
+        opts = { ensure_installed = { "delve" } },
+      },
+      {
+        "leoluz/nvim-dap-go",
+        opts = {},
+      },
+    },
+  },
   -- masonとlspconfigの橋渡し
   {
     "williamboman/mason-lspconfig.nvim",
@@ -299,9 +307,11 @@ local plugins = {
     dependencies = {
       "williamboman/mason.nvim",
       "williamboman/mason-lspconfig.nvim",
+      "hrsh7th/cmp-nvim-lsp",
     },
     config = function()
       local lspconfig = require("lspconfig")
+      local capabilities = require("cmp_nvim_lsp").default_capabilities()
 
       -- 共通のキーマップ
       local on_attach = function(_, bufnr)
@@ -333,37 +343,46 @@ local plugins = {
       }
 
       for _, server in ipairs(servers) do
-        lspconfig[server].setup({ on_attach = on_attach })
+        lspconfig[server].setup({ on_attach = on_attach, capabilities = capabilities })
       end
 
       -- Java（jdtlsは専用設定が必要）
       lspconfig.jdtls.setup({ on_attach = on_attach })
       lspconfig.gopls.setup({
         on_attach = on_attach,
+        capabilities = capabilities,
         filetypes = { "go", "gomod", "gowork", "gotmpl" },
         cmd = { "gopls" },
         settings = {
           gopls = {
-            analyses = {
-              unusedparams = true,           -- 未使用パラメータの警告
-              shadow = true,                 -- 変数シャドウの警告
-              unusedvariable = true,         -- 未使用変数の警告
+            gofumpt            = true,
+            staticcheck        = true,
+            analyses           = {
+              nilness        = true,
+              unusedparams   = true,
+              unusedwrite    = true,
+              unusedvariable = true,
+              shadow         = true,
             },
-            staticcheck = true,              -- staticcheckによる静的解析
-            gofumpt = true,                  -- gofumptによるフォーマット
-            hints = {
-              assignVariableTypes = true,    -- 変数の型ヒント表示
-              compositeLiteralFields = true, -- 構造体フィールドヒント
-              constantValues = true,         -- 定数値ヒント
-              functionTypeParameters = true, -- 関数型パラメータヒント
-              parameterNames = true,         -- パラメータ名ヒント
-              rangeVariableTypes = true,     -- range変数の型ヒント
+            hints              = {
+              assignVariableTypes    = true,
+              compositeLiteralFields = true,
+              constantValues         = true,
+              functionTypeParameters = true,
+              parameterNames         = true,
+              rangeVariableTypes     = true,
+            },
+            completeUnimported = true,
+            usePlaceholders    = true,
+            semanticTokens     = true,
+            directoryFilters   = {
+              "-.git", "-.vscode", "-.idea", "-node_modules"
             },
           },
         },
       })
       -- Kotlin
-      lspconfig.kotlin_language_server.setup({ on_attach = on_attach })
+      lspconfig.kotlin_language_server.setup({ on_attach = on_attach, capabilities = capabilities })
     end,
   },
   {
@@ -469,6 +488,9 @@ local plugins = {
     end,
   },
   {
+    "fredrikaverpil/neotest-golang",
+  },
+  {
     'nvim-neotest/neotest',
     tag = 'v5.6.1',
     dependencies = {
@@ -482,6 +504,7 @@ local plugins = {
       "rouge8/neotest-rust",
       "rcasia/neotest-java",
       "nvim-neotest/neotest-python",
+      "fredrikaverpil/neotest-golang",
     },
     config = function()
       require('neotest').setup({
@@ -503,6 +526,11 @@ local plugins = {
             dap = { justMyCode = false },
             runner = "pytest", -- "unittest" に変更も可
           }),
+          ["neotest-golang"] = {
+            -- Here we can set options for neotest-golang, e.g.
+            -- go_test_args = { "-v", "-race", "-count=1", "-timeout=60s" },
+            dap_go_enabled = true, -- requires leoluz/nvim-dap-go
+          },
         },
       })
 
@@ -522,7 +550,7 @@ local opts = {
     enabled = true,
   },
   install = {
-    colorscheme = { "nightfox" }
+    -- colorscheme = { "nightfox" }
   },
   preformance = {
     cache = {

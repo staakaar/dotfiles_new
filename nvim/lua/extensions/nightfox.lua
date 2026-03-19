@@ -1,4 +1,3 @@
--- Default options
 require('nightfox').setup({
   options = {
     -- Compiled file's destination location
@@ -35,7 +34,6 @@ require('nightfox').setup({
       search = false,
     },
     modules = { -- List of various plugins and additional options
-      -- ...
       treesitter = true,
       native_lsp = {
         enable     = true,
@@ -60,13 +58,17 @@ require('nightfox').setup({
     }
   },
   groups = {
-    -- nightfox = {
-    --   ["@keyword"]          = { fg = "orange" },
-    --   ["@variable"]         = { fg = "magenta" },
-    --   ["@variable.builtin"] = { fg = "magenta" },
-    -- },
+    nightfox = {
+      -- treesitter ハイライトグループを明示的に上書き
+      ["@keyword"]  = { fg = "palette.orange" },
+      -- ["@keyword.function"]   = { fg = "palette.orange" },
+      -- ["@keyword.return"]     = { fg = "palette.orange" },
+      ["@variable"] = { fg = "palette.magenta" },
+      -- ["@variable.builtin"]   = { fg = "palette.magenta" },
+      -- ["@variable.parameter"] = { fg = "palette.magenta" },
+    },
   },
 })
 
-vim.fn.system("rm -rf " .. vim.fn.stdpath("cache") .. "/nightfox")
+-- vim.fn.system("rm -rf " .. vim.fn.stdpath("cache") .. "/nightfox")
 vim.cmd("colorscheme nightfox")
