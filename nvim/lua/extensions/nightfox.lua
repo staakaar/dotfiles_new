@@ -69,6 +69,11 @@ require('nightfox').setup({
     },
   },
 })
-
--- vim.fn.system("rm -rf " .. vim.fn.stdpath("cache") .. "/nightfox")
-vim.cmd("colorscheme nightfox")
+vim.fn.system("rm -rf " .. vim.fn.stdpath("cache") .. "/nightfox")
+-- vim.cmd("colorscheme nightfox")
+vim.api.nvim_create_autocmd("VimEnter", {
+  once = true,
+  callback = function()
+    vim.cmd("colorscheme nightfox")
+  end,
+})

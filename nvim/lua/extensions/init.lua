@@ -26,6 +26,7 @@ local plugins = {
     'nvim-treesitter/nvim-treesitter',
     build = ":TSUpdate",
     lazy = false,
+    priority = 1000,
     branch = "master",
     dependencies = {
       'nvim-treesitter/nvim-treesitter-textobjects',
@@ -52,19 +53,20 @@ local plugins = {
     event = 'CursorMoved',
   },
   {
-    'romgrk/barbar.nvim',
-    dependencies = {
-      'lewis6991/gitsigns.nvim',     -- OPTIONAL: for git status
-      'nvim-tree/nvim-web-devicons', -- OPTIONAL: for file icons
-    },
-    -- init = function() vim.g.barbar_auto_setup = false end,
-    config = function() require 'extensions.barbar' end,
-    version = '^1.0.0', -- optional: only update when a new 1.x version is released
+    'akinsho/bufferline.nvim',
+    version = "*",
+    dependencies = 'nvim-tree/nvim-web-devicons',
+    config = function() require "extensions.bufferline" end,
   },
   -- {
-  --   'akinsho/toggleterm.nvim',
-  --   version = "*",
-  --   config = function() require 'extensions.toggleterm' end,
+  --   'romgrk/barbar.nvim',
+  --   dependencies = {
+  --     'lewis6991/gitsigns.nvim',     -- OPTIONAL: for git status
+  --     'nvim-tree/nvim-web-devicons', -- OPTIONAL: for file icons
+  --   },
+  --   -- init = function() vim.g.barbar_auto_setup = false end,
+  --   config = function() require 'extensions.barbar' end,
+  --   version = '^1.9.1', -- optional: only update when a new 1.x version is released
   -- },
   {
     'windwp/nvim-autopairs',
@@ -72,6 +74,17 @@ local plugins = {
     config = true
     -- use opts = {} for passing setup options
     -- this is equivalent to setup({}) function
+  },
+  {
+    "kylechui/nvim-surround",
+    version = "^4.0.0", -- Use for stability; omit to use `main` branch for the latest features
+    event = "VeryLazy",
+    -- Optional: See `:h nvim-surround.configuration` and `:h nvim-surround.setup` for details
+    -- config = function()
+    --     require("nvim-surround").setup({
+    --         -- Put your configuration here
+    --     })
+    -- end
   },
   {
     "NeogitOrg/neogit",
@@ -198,6 +211,94 @@ local plugins = {
   --     require("nvim-tree").setup {}
   --   end,
   -- },
+  {
+    "pechorin/any-jump.vim",
+    cmd = { "AnyJump", "AnyJumpVisual", "AnyJumpBack", "AnyJumpLastResults" },
+    keys = {
+      { "<leader>j",  "<Cmd>AnyJump<CR>",            mode = "n", desc = "Any Jump" },
+      { "<leader>j",  "<Cmd>AnyJumpVisual<CR>",      mode = "x", desc = "Any Jump Visual" },
+      { "<leader>ab", "<Cmd>AnyJumpBack<CR>",        mode = "n", desc = "Any Jump Back" },
+      { "<leader>al", "<Cmd>AnyJumpLastResults<CR>", mode = "n", desc = "Any Jump Last Results" },
+    },
+    init = function()
+      -- デフォルトキーバインドを無効化（上記keysで管理するため）
+      vim.g.any_jump_disable_default_keybindings  = 1
+      -- 検索エンジン（ripgrepを優先）
+      vim.g.any_jump_search_prefered_engine       = "rg"
+      -- 検索結果の表示件数
+      vim.g.any_jump_max_search_results           = 10
+      -- プレビュー行数
+      vim.g.any_jump_preview_lines_count          = 5
+      -- 行番号を表示
+      vim.g.any_jump_list_numbers                 = 1
+      -- 参照を自動検索
+      vim.g.any_jump_references_enabled           = 1
+      -- ファイルごとにグループ化
+      vim.g.any_jump_grouping_enabled             = 0
+      -- ウィンドウサイズ
+      vim.g.any_jump_window_width_ratio           = 0.6
+      vim.g.any_jump_window_height_ratio          = 0.6
+      vim.g.any_jump_window_top_offset            = 4
+      -- コメント行を除外
+      vim.g.any_jump_remove_comments_from_results = 1
+      -- 無視するファイル
+      vim.g.any_jump_ignored_files                = { "*.tmp", "*.temp" }
+      -- ジャンプ後に画面を中央に
+      vim.g.any_jump_center_screen_after_jump     = true
+      -- 結果UIスタイル
+      vim.g.any_jump_results_ui_style             = "filename_first"
+    end,
+  },
+  {
+    "norcalli/nvim-colorizer.lua",
+    event = { "BufReadPre", "BufNewFile" },
+    config = function()
+      require("colorizer").setup({
+        -- ★ 全ファイルタイプで有効化
+        "*",
+        -- ファイルタイプごとの個別設定
+        css = {
+          rgb_fn   = true, -- rgb(), rgba() を有効化
+          hsl_fn   = true, -- hsl(), hsla() を有効化
+          css      = true, -- CSS全機能を有効化
+          css_fn   = true,
+          RRGGBBAA = true,
+        },
+        scss = {
+          rgb_fn = true,
+          hsl_fn = true,
+          css    = true,
+        },
+        html = {
+          mode  = "foreground", -- 文字色で表示
+          names = true,
+        },
+        javascript = {
+          rgb_fn = true,
+        },
+        typescript = {
+          rgb_fn = true,
+        },
+        vue = {
+          rgb_fn = true,
+          css    = true,
+        },
+        lua = {
+          RGB    = true,
+          RRGGBB = true,
+        },
+      }, {
+        -- デフォルトオプション（全ファイルタイプに適用）
+        RGB      = true,         -- #RGB
+        RRGGBB   = true,         -- #RRGGBB
+        names    = true,         -- "Blue" などの名前
+        RRGGBBAA = false,        -- #RRGGBBAA
+        rgb_fn   = false,        -- rgb(), rgba()
+        hsl_fn   = false,        -- hsl(), hsla()
+        mode     = "background", -- 背景色で表示
+      })
+    end,
+  },
   {
     "antosha417/nvim-lsp-file-operations",
     dependencies = {
