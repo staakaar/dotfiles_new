@@ -81,40 +81,48 @@ end, { noremap = true, silent = true, desc = "Terminal new buffer" })
 map("t", "<Esc><Esc>", "<C-\\><C-n>",
   { noremap = true, silent = true, desc = "Terminal normal mode" })
 
--- barbar
+-- bufferline
 -- 前/次のバッファ移動
-map("n", "<C-j>", "<Cmd>BufferNext<CR>", { noremap = true, silent = true, desc = "Next buffer" })
-map("n", "<C-k>", "<Cmd>BufferPrevious<CR>", { noremap = true, silent = true, desc = "Previous buffer" })
+map("n", "<Tab>", "<Cmd>BufferLineCycleNext<CR>", { noremap = true, silent = true, desc = "Next buffer" })
+map("n", "<S-Tab>", "<Cmd>BufferLineCyclePrev<CR>", { noremap = true, silent = true, desc = "Previous buffer" })
 
 -- バッファ並び替え
-map("n", "<leader>bh", "<Cmd>BufferMovePrevious<CR>", { noremap = true, silent = true, desc = "Move buffer left" })
-map("n", "<leader>bl", "<Cmd>BufferMoveNext<CR>", { noremap = true, silent = true, desc = "Move buffer right" })
+map("n", "<leader>bh", "<Cmd>BufferLineMoveNext<CR>", { noremap = true, silent = true, desc = "Move buffer right" })
+map("n", "<leader>bl", "<Cmd>BufferLineMovePrev<CR>", { noremap = true, silent = true, desc = "Move buffer left" })
 
 -- 番号で直接ジャンプ
-map("n", "<leader>1", "<Cmd>BufferGoto 1<CR>", { noremap = true, silent = true, desc = "Buffer 1" })
-map("n", "<leader>2", "<Cmd>BufferGoto 2<CR>", { noremap = true, silent = true, desc = "Buffer 2" })
-map("n", "<leader>3", "<Cmd>BufferGoto 3<CR>", { noremap = true, silent = true, desc = "Buffer 3" })
-map("n", "<leader>4", "<Cmd>BufferGoto 4<CR>", { noremap = true, silent = true, desc = "Buffer 4" })
-map("n", "<leader>5", "<Cmd>BufferGoto 5<CR>", { noremap = true, silent = true, desc = "Buffer 5" })
-map("n", "<leader>6", "<Cmd>BufferGoto 6<CR>", { noremap = true, silent = true, desc = "Buffer 6" })
-map("n", "<leader>7", "<Cmd>BufferGoto 7<CR>", { noremap = true, silent = true, desc = "Buffer 7" })
-map("n", "<leader>8", "<Cmd>BufferGoto 8<CR>", { noremap = true, silent = true, desc = "Buffer 8" })
-map("n", "<leader>9", "<Cmd>BufferGoto 9<CR>", { noremap = true, silent = true, desc = "Buffer 9" })
-map("n", "<leader>0", "<Cmd>BufferLast<CR>", { noremap = true, silent = true, desc = "Last buffer" })
+map("n", "<leader>1", function() require("bufferline").go_to(1, true) end,
+  { noremap = true, silent = true, desc = "Buffer 1" })
+map("n", "<leader>2", function() require("bufferline").go_to(2, true) end,
+  { noremap = true, silent = true, desc = "Buffer 2" })
+map("n", "<leader>3", function() require("bufferline").go_to(3, true) end,
+  { noremap = true, silent = true, desc = "Buffer 3" })
+map("n", "<leader>4", function() require("bufferline").go_to(4, true) end,
+  { noremap = true, silent = true, desc = "Buffer 4" })
+map("n", "<leader>5", function() require("bufferline").go_to(5, true) end,
+  { noremap = true, silent = true, desc = "Buffer 5" })
+map("n", "<leader>6", function() require("bufferline").go_to(6, true) end,
+  { noremap = true, silent = true, desc = "Buffer 6" })
+map("n", "<leader>7", function() require("bufferline").go_to(7, true) end,
+  { noremap = true, silent = true, desc = "Buffer 7" })
+map("n", "<leader>8", function() require("bufferline").go_to(8, true) end,
+  { noremap = true, silent = true, desc = "Buffer 8" })
+map("n", "<leader>9", function() require("bufferline").go_to(9, true) end,
+  { noremap = true, silent = true, desc = "Buffer 9" })
+map("n", "<leader>0", function() require("bufferline").go_to(-1, true) end,
+  { noremap = true, silent = true, desc = "Last buffer" })
 
 -- バッファを閉じる
-map("n", "<leader>x", "<Cmd>BufferClose<CR>", { noremap = true, silent = true, desc = "Close buffer" })
-map("n", "<leader>X", "<Cmd>BufferCloseAllButCurrent<CR>",
-  { noremap = true, silent = true, desc = "Close all but current" })
+map("n", "<leader>x", "<Cmd>bdelete<CR>", { noremap = true, silent = true, desc = "Close buffer" })
+map("n", "<leader>X", "<Cmd>BufferLineCloseOthers<CR>", { noremap = true, silent = true, desc = "Close all but current" })
 
 -- ピン留め
-map("n", "<leader>bp", "<Cmd>BufferPin<CR>", { noremap = true, silent = true, desc = "Pin/Unpin buffer" })
+map("n", "<leader>bp", "<Cmd>BufferLineTogglePin<CR>", { noremap = true, silent = true, desc = "Pin/Unpin buffer" })
 
--- 視覚的にバッファを選んでジャンプ/削除
-map("n", "<leader>bj", "<Cmd>BufferPick<CR>", { noremap = true, silent = true, desc = "Pick buffer" })
-map("n", "<leader>bk", "<Cmd>BufferPickDelete<CR>", { noremap = true, silent = true, desc = "Pick & delete buffer" })
+-- 視覚的にバッファを選んでジャンプ
+map("n", "<leader>bj", "<Cmd>BufferLinePick<CR>", { noremap = true, silent = true, desc = "Pick buffer" })
+map("n", "<leader>bk", "<Cmd>BufferLinePickClose<CR>", { noremap = true, silent = true, desc = "Pick & close buffer" })
 
 -- 左右の不要バッファを閉じる
-map("n", "<leader>b[", "<Cmd>BufferCloseBuffersLeft<CR>", { noremap = true, silent = true, desc = "Close buffers left" })
-map("n", "<leader>b]", "<Cmd>BufferCloseBuffersRight<CR>",
-  { noremap = true, silent = true, desc = "Close buffers right" })
+map("n", "<leader>b[", "<Cmd>BufferLineCloseLeft<CR>", { noremap = true, silent = true, desc = "Close buffers left" })
+map("n", "<leader>b]", "<Cmd>BufferLineCloseRight<CR>", { noremap = true, silent = true, desc = "Close buffers right" })

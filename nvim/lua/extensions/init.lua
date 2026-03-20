@@ -148,8 +148,48 @@ local plugins = {
     dependencies = { 'nvim-tree/nvim-web-devicons' }
   },
   {
-    'kevinhwang91/nvim-hlslens',
-    event = { 'FilterWritePre' },
+    "folke/flash.nvim",
+    event = "VeryLazy",
+    opts = {},
+    keys = {
+      { "s",     mode = { "n", "x", "o" }, function() require("flash").jump() end,              desc = "Flash Jump" },
+      { "S",     mode = { "n", "x", "o" }, function() require("flash").treesitter() end,        desc = "Flash Treesitter" },
+      { "r",     mode = "o",               function() require("flash").remote() end,            desc = "Remote Flash" },
+      { "R",     mode = { "o", "x" },      function() require("flash").treesitter_search() end, desc = "Treesitter Search" },
+      { "<C-s>", mode = { "c" },           function() require("flash").toggle() end,            desc = "Toggle Flash Search" },
+    },
+    config = function() require 'extensions.flash' end,
+  },
+  {
+    "MagicDuck/grug-far.nvim",
+    cmd  = "GrugFar",
+    keys = {
+      {
+        "<leader>sr",
+        function() require("grug-far").open() end,
+        desc = "Search and Replace (grug-far)",
+      },
+      {
+        "<leader>sw",
+        function()
+          require("grug-far").open({
+            prefills = { search = vim.fn.expand("<cword>") }
+          })
+        end,
+        desc = "Search current word",
+      },
+      {
+        "<leader>sr",
+        function()
+          require("grug-far").with_visual_selection()
+        end,
+        mode = "v",
+        desc = "Search selection",
+      },
+    },
+    opts = {
+      headerMaxWidth = 80,
+    },
   },
   {
     'lewis6991/gitsigns.nvim',
@@ -200,17 +240,6 @@ local plugins = {
       { "nvim-tree/nvim-web-devicons",              opts = {},     build = 'make' },
     },
   },
-  -- {
-  --   "nvim-tree/nvim-tree.lua",
-  --   version = "*",
-  --   lazy = false,
-  --   dependencies = {
-  --     "nvim-tree/nvim-web-devicons",
-  --   },
-  --   config = function()
-  --     require("nvim-tree").setup {}
-  --   end,
-  -- },
   {
     "pechorin/any-jump.vim",
     cmd = { "AnyJump", "AnyJumpVisual", "AnyJumpBack", "AnyJumpLastResults" },
@@ -312,24 +341,6 @@ local plugins = {
       require("lsp-file-operations").setup()
     end,
   },
-  -- {
-  --   'kyazdani42/nvim-tree.lua',
-  --   dependencies = {
-  --     {
-  --       'b0o/nvim-tree-preview.lua',
-  --       dependencies = {
-  --         'nvim-lua/plenary.nvim',
-  --         '3rd/image.nvim', -- Optional, for previewing images
-  --       },
-  --     },
-  --   },
-  -- },
-  -- {
-  --   "b0o/nvim-tree-preview.lua",
-  --   config = function()
-  --     require("nvim-tree-preview").setup()
-  --   end
-  -- },
   {
     "williamboman/mason.nvim",
     config = function() require 'extensions.mason' end,
