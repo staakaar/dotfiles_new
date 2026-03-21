@@ -112,7 +112,7 @@ local plugins = {
     dependencies = { "folke/snacks.nvim" },
     config = true,
     opts = {
-      terminal_cmd = ".local/bin/claude"
+      terminal_cmd = vim.fn.expand("~/.local/bin/claude")
     },
     keys = {
       { "<leader>a",  nil,                              desc = "AI/Claude Code" },
