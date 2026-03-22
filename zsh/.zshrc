@@ -295,3 +295,4 @@ export PATH="./build/debug:$PATH"
 source /opt/homebrew/share/zsh-syntax-highlighting/zsh-syntax-highlighting.zsh
 # export PATH="$HOME/.local/share/../bin/env"
 
+source /opt/homebrew/share/zsh-syntax-highlighting/zsh-syntax-highlighting.zsh

@@ -5,7 +5,7 @@ config.automatically_reload_config = true
 
 config.color_scheme = 'nightfox'
 config.term = 'xterm-256color'
-config.window_background_opacity = 0.90
+config.window_background_opacity = 0.80
 config.macos_window_background_blur = 20
 config.window_decorations = "RESIZE"
 config.hide_tab_bar_if_only_one_tab = true
@@ -15,8 +15,9 @@ config.color_scheme_dirs = { wezterm.home_dir .. '/.config/wezterm/colors/wezter
 config.initial_cols = 120
 config.initial_rows = 28
 config.font_size = 12
-config.font = wezterm.font 'Fira Code'
-config.font = wezterm.font('JetBrains Mono', { weight = 'Bold', italic = true })
+config.font = wezterm.font_with_fallback({
+  { family = "UDEV Gothic 35NF", weight = "Regular" },
+})
 config.bold_brightens_ansi_colors = true
 config.line_height = 1.2
 config.harfbuzz_features = { 'calt=1', 'clig=1', 'liga=1' }
@@ -45,7 +46,6 @@ wezterm.on("format-tab-title", function(tab, tabs, panes, config, hover, max_wid
   local foreground = "#FFFFFF"
 
   if tab.is_active then
-    -- background = "#ae8b2d"
     background = "#1e90ff"
     foreground = "#FFFFFF"
   end
