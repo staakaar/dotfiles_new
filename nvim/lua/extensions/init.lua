@@ -102,7 +102,40 @@ local plugins = {
     dependencies = { "folke/snacks.nvim" },
     config = true,
     opts = {
-      terminal_cmd = vim.fn.expand("~/.local/bin/claude")
+      terminal_cmd = vim.fn.expand("~/.local/bin/claude"),
+      terminal = {
+        split_side             = "right",
+        split_width_percentage = 0.35,
+        provider               = "snacks",
+        auto_close             = true,
+
+        -- ★ snacks_win_opts で背景透過を設定
+        snacks_win_opts        = {
+          -- フロートウィンドウにする場合
+          -- position = "float",
+          -- width    = 0.9,
+          -- height   = 0.9,
+
+          border   = "rounded",
+
+          -- ★ backdrop を 100 にすることでWezTermの背景と同じになる
+          -- 0=完全透明 〜 100=完全不透明（デフォルトは60程度）
+          backdrop = 100,
+
+          wo       = {
+            -- ★ winblend を0にして透過を無効化
+            winblend = 0,
+
+            -- ★ ハイライトグループをNormalに合わせる
+            winhighlight = table.concat({
+              "Normal:Normal",
+              "NormalNC:NormalNC",
+              "NormalFloat:Normal",
+              "FloatBorder:FloatBorder",
+            }, ","),
+          },
+        },
+      },
     },
     keys = {
       { "<leader>a",  nil,                              desc = "AI/Claude Code" },
