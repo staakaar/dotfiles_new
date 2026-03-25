@@ -113,8 +113,30 @@ map("n", "<leader>0", function() require("bufferline").go_to(-1, true) end,
   { noremap = true, silent = true, desc = "Last buffer" })
 
 -- バッファを閉じる
-map("n", "<leader>x", "<Cmd>bdelete<CR>", { noremap = true, silent = true, desc = "Close buffer" })
-map("n", "<leader>X", "<Cmd>BufferLineCloseOthers<CR>", { noremap = true, silent = true, desc = "Close all but current" })
+-- map("n", "<leader>x", "<Cmd>bdelete<CR>", { noremap = true, silent = true, desc = "Close buffer" })
+map("n", "<leader>x", function()
+  local bufnr   = vim.api.nvim_get_current_buf()
+  local buftype = vim.bo[bufnr].buftype
+  if buftype == "terminal" then
+    vim.cmd("bd!")
+  else
+    vim.cmd("bdelete!")
+  end
+end, { noremap = true, silent = true, desc = "Close buffer" })
+-- map("n", "<leader>X", "<Cmd>BufferLineCloseOthers<CR>", { noremap = true, silent = true, desc = "Close all but current" })
+map("n", "<leader>X", function()
+  local current = vim.api.nvim_get_current_buf()
+  for _, bufnr in ipairs(vim.api.nvim_list_bufs()) do
+    if bufnr ~= current and vim.api.nvim_buf_is_valid(bufnr) then
+      local buftype = vim.bo[bufnr].buftype
+      if buftype == "terminal" then
+        pcall(vim.cmd, "bd! " .. bufnr)
+      else
+        pcall(vim.cmd, "bdelete! " .. bufnr)
+      end
+    end
+  end
+end, { noremap = true, silent = true, desc = "Close all but current" })
 
 -- ピン留め
 map("n", "<leader>bp", "<Cmd>BufferLineTogglePin<CR>", { noremap = true, silent = true, desc = "Pin/Unpin buffer" })
