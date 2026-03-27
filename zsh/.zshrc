@@ -228,6 +228,8 @@ alias viz="vim ~/.config/zsh/.zshrc"
 # k8s command alias
 alias k="kubectl"
 
+alias cc="claude"
+
 #npm
 alias ni="npm install"
 alias nu="npm uninstall"
@@ -235,10 +237,6 @@ alias nu="npm uninstall"
 alias vz="vim ~/.zshrc"
 export VOLTA_HOME="$HOME/.volta"
 export PATH="$VOLTA_HOME/bin:$PATH"
-# eval "$(atuin init zsh)"
-# if [ -f `brew --prefix`/etc/autojump ]; then
-# . `brew --prefix`/etc/autojump
-# fi
 
 [ -f ~/.fzf.zsh ] && source ~/.fzf.zsh
 
@@ -297,3 +295,4 @@ source /opt/homebrew/share/zsh-syntax-highlighting/zsh-syntax-highlighting.zsh
 
 source /opt/homebrew/share/zsh-syntax-highlighting/zsh-syntax-highlighting.zsh
 export PATH=/opt/homebrew/share/google-cloud-sdk/bin:./build/debug:/Users/iwamototakayuki/.volta/bin:/Users/iwamototakayuki/.local/bin:/opt/homebrew/opt/llvm@19/bin:/opt/homebrew/opt/llvm@19/bin:/opt/homebrew/opt/ruby/bin:/opt/homebrew/bin:/usr/local/opt/gnu-sed/libexec/gnubin:/usr/local/opt/libiconv/bin:/usr/local/opt/libarchive/bin:/usr/local/opt/libarchive/bin:/usr/local/opt/llvm@19/bin:/Users/iwamototakayuki/.bun/bin:/usr/local/opt/curl/bin:/usr/local/opt/kubernetes-cli@1.30/bin:/usr/local/opt/libpq/bin:/usr/local/opt/curl/bin:/usr/local/opt/m4/bin:/Users/iwamototakayuki/dotfiles/.config/nvm/versions/node/v20.17.0/bin:/Users/iwamototakayuki/.rd/bin:/usr/local/opt/postgresql@13/bin:/opt/homebrew/bin/brew:/usr/local/opt/ruby/bin:/Users/iwamototakayuki/.pyenv/shims:/Users/iwamototakayuki/.volta/bin:/Users/iwamototakayuki/.rd/bin:/Users/iwamototakayuki/.deno/bin:/Library/Java/JavaVirtualMachines/amazon-corretto-17.jdk/Contents/Home//bin:/usr/local:/usr/local/Cellar/node/19.4.0/bin:/usr/local/bin/spring:/usr/local/bin/fzf:/usr/local/bin:/usr/bin:/bin:/usr/sbin:/sbin:/Users/iwamototakayuki/.cargo/bin:/usr/local/opt/mysql@5.7/bin:/usr/local/opt/openssl@1.1/bin:/Users/iwamototakayuki/.rbenv/bin:/usr/local/bin:/usr/bin:/bin:/usr/sbin:/sbin:/usr/local/sbin:/Users/iwamototakayuki/.asdf/asdf.sh:/usr/local/Cellar/postgresql@14/14.6/bin/psql:/Users/iwamototakayuki/go/bin:/.local/bin/claude
+export ZSH_COMPDUMP="$HOME/.cache/zsh/.zcompdump"

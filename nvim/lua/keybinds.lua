@@ -81,6 +81,15 @@ end, { noremap = true, silent = true, desc = "Terminal new buffer" })
 map("t", "<Esc><Esc>", "<C-\\><C-n>",
   { noremap = true, silent = true, desc = "Terminal normal mode" })
 
+-- ターミナルモードからウィンドウ移動（Claudeの会話をキャンセルせずに移動）
+map("t", "<C-h>", "<C-\\><C-n><C-w>h", { noremap = true, silent = true, desc = "Terminal: move to left window" })
+map("t", "<C-j>", "<C-\\><C-n><C-w>j", { noremap = true, silent = true, desc = "Terminal: move to lower window" })
+map("t", "<C-k>", "<C-\\><C-n><C-w>k", { noremap = true, silent = true, desc = "Terminal: move to upper window" })
+map("t", "<C-l>", "<C-\\><C-n><C-w>l", { noremap = true, silent = true, desc = "Terminal: move to right window" })
+
+-- telescope
+map("n", "<leader>ft", "<Cmd>Telescope buffers<CR>", { noremap = true, silent = true, desc = "List open buffers" })
+
 -- bufferline
 -- 前/次のバッファ移動
 map("n", "<Tab>", "<Cmd>BufferLineCycleNext<CR>", { noremap = true, silent = true, desc = "Next buffer" })
@@ -91,25 +100,25 @@ map("n", "<leader>bh", "<Cmd>BufferLineMoveNext<CR>", { noremap = true, silent =
 map("n", "<leader>bl", "<Cmd>BufferLineMovePrev<CR>", { noremap = true, silent = true, desc = "Move buffer left" })
 
 -- 番号で直接ジャンプ
-map("n", "<leader>1", function() require("bufferline").go_to(1, true) end,
+map("n", "<leader>1", function() require("bufferline").go_to(1, false) end,
   { noremap = true, silent = true, desc = "Buffer 1" })
-map("n", "<leader>2", function() require("bufferline").go_to(2, true) end,
+map("n", "<leader>2", function() require("bufferline").go_to(2, false) end,
   { noremap = true, silent = true, desc = "Buffer 2" })
-map("n", "<leader>3", function() require("bufferline").go_to(3, true) end,
+map("n", "<leader>3", function() require("bufferline").go_to(3, false) end,
   { noremap = true, silent = true, desc = "Buffer 3" })
-map("n", "<leader>4", function() require("bufferline").go_to(4, true) end,
+map("n", "<leader>4", function() require("bufferline").go_to(4, false) end,
   { noremap = true, silent = true, desc = "Buffer 4" })
-map("n", "<leader>5", function() require("bufferline").go_to(5, true) end,
+map("n", "<leader>5", function() require("bufferline").go_to(5, false) end,
   { noremap = true, silent = true, desc = "Buffer 5" })
-map("n", "<leader>6", function() require("bufferline").go_to(6, true) end,
+map("n", "<leader>6", function() require("bufferline").go_to(6, false) end,
   { noremap = true, silent = true, desc = "Buffer 6" })
-map("n", "<leader>7", function() require("bufferline").go_to(7, true) end,
+map("n", "<leader>7", function() require("bufferline").go_to(7, false) end,
   { noremap = true, silent = true, desc = "Buffer 7" })
-map("n", "<leader>8", function() require("bufferline").go_to(8, true) end,
+map("n", "<leader>8", function() require("bufferline").go_to(8, false) end,
   { noremap = true, silent = true, desc = "Buffer 8" })
-map("n", "<leader>9", function() require("bufferline").go_to(9, true) end,
+map("n", "<leader>9", function() require("bufferline").go_to(9, false) end,
   { noremap = true, silent = true, desc = "Buffer 9" })
-map("n", "<leader>0", function() require("bufferline").go_to(-1, true) end,
+map("n", "<leader>0", function() require("bufferline").go_to(-1, false) end,
   { noremap = true, silent = true, desc = "Last buffer" })
 
 -- バッファを閉じる

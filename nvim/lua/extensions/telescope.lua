@@ -2,8 +2,24 @@ local builtin = require('telescope.builtin')
 local telescope = require 'telescope'
 local themes = require 'telescope.themes'
 local actions = require 'telescope.actions'
+
+-- gitルートを返す。gitリポジトリ外なら現在のcwdを返す
+local function project_root()
+  local root = vim.fn.systemlist("git -C " .. vim.fn.expand("%:p:h") .. " rev-parse --show-toplevel")[1]
+  if vim.v.shell_error ~= 0 then
+    return vim.fn.getcwd()
+  end
+  return root
+end
+
 vim.keymap.set('n', '<leader>ff', builtin.find_files, { desc = 'Telescope find files' })
 vim.keymap.set('n', '<leader>fg', builtin.live_grep, { desc = 'Telescope live grep' })
+vim.keymap.set('n', '<leader>fs', function()
+  builtin.live_grep({ cwd = project_root() })
+end, { desc = 'Telescope grep in project' })
+vim.keymap.set('n', '<leader>fF', function()
+  builtin.find_files({ cwd = project_root(), hidden = true, no_ignore = true })
+end, { desc = 'Telescope find files in project (include hidden)' })
 vim.keymap.set('n', '<leader>fb', builtin.buffers, { desc = 'Telescope buffers' })
 vim.keymap.set('n', '<leader>fh', builtin.help_tags, { desc = 'Telescope help tags' })
 vim.keymap.set("n", "<leader>fp", function()

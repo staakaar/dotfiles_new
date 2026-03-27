@@ -188,3 +188,27 @@ bufferline.setup({
     },
   },
 })
+
+-- colorscheme適用後にハイライトを上書き
+-- bufferline自身もColorScheme *でset_all()を呼ぶため、
+-- vim.schedule()で後から実行することで確実に上書きする
+vim.api.nvim_create_autocmd("ColorScheme", {
+  pattern = "nightfox",
+  callback = function()
+    vim.schedule(function()
+      local p = require("nightfox.palette").load("nightfox")
+      local hl = vim.api.nvim_set_hl
+      hl(0, "BufferLineFill",              { bg = p.bg0 })
+      hl(0, "BufferLineBackground",        { fg = p.fg3, bg = p.bg1 })
+      hl(0, "BufferLineBufferSelected",    { fg = p.fg1, bg = p.bg3, bold = true })
+      hl(0, "BufferLineBufferVisible",     { fg = p.fg2, bg = p.bg2 })
+      hl(0, "BufferLineNumbers",           { fg = p.fg3, bg = p.bg1 })
+      hl(0, "BufferLineNumbersSelected",   { fg = p.fg1, bg = p.bg3, bold = true })
+      hl(0, "BufferLineNumbersVisible",    { fg = p.fg2, bg = p.bg2 })
+      hl(0, "BufferLineSeparator",         { fg = p.bg0, bg = p.bg1 })
+      hl(0, "BufferLineSeparatorSelected", { fg = p.bg0, bg = p.bg3 })
+      hl(0, "BufferLineSeparatorVisible",  { fg = p.bg0, bg = p.bg2 })
+      hl(0, "BufferLineIndicatorSelected", { fg = p.blue.base, bg = p.bg3 })
+    end)
+  end,
+})
