@@ -31,7 +31,7 @@ local plugins = {
     dependencies = {
       'nvim-treesitter/nvim-treesitter-textobjects',
     },
-    main = "nvim-treesitter",
+    main = "nvim-treesitter.configs",
     opts = {
       ensure_installed = {
         "go", "java", "ruby",
@@ -40,7 +40,7 @@ local plugins = {
         "html", "css", "vue", "gomod", "gowork", "gosum", "tsx", "vim", "dockerfile", "sql", "kotlin", "markdown_inline"
       },
       highlight = {
-        enable = false,
+        enable = true,
         additional_vim_regex_highlighting = false,
       },
       indent = {
@@ -365,12 +365,40 @@ local plugins = {
     end,
   },
   {
-    "williamboman/mason.nvim",
-    config = function() require 'extensions.mason' end,
-  },
-  {
     "mason-org/mason.nvim",
-    opts = { ensure_installed = { "goimports", "gofumpt", "gomodifytags", "impl", "golangci-lint", "delve" } },
+    build = ":MasonUpdate",
+    opts = {
+      ui = {
+        icons = {
+          package_installed   = "✓",
+          package_pending     = "➜",
+          package_uninstalled = "✗",
+        },
+      },
+    },
+  },
+  -- mason-tool-installer: LSP以外のツール（formatter/linter/dap）を自動インストール
+  {
+    "WhoIsSethDaniel/mason-tool-installer.nvim",
+    dependencies = { "mason-org/mason.nvim" },
+    opts = {
+      ensure_installed = {
+        "goimports", "gofumpt", "gomodifytags", "impl",
+        "golangci-lint", "delve",
+        "erb-formatter", "erb-lint",
+        "rubocop",
+        "stylua", "prettier",
+      },
+    },
+  },
+  -- Java専用LSPプラグイン（nvim-java: batteries included）
+  {
+    "nvim-java/nvim-java",
+    ft = "java",
+    config = function()
+      require("java").setup()
+      vim.lsp.enable("jdtls")
+    end,
   },
   {
     "leoluz/nvim-dap-go",
@@ -387,27 +415,81 @@ local plugins = {
   },
   {
     "mfussenegger/nvim-dap",
-    optional = false,
     dependencies = {
+      -- UI
       {
-        "mason-org/mason.nvim",
-        opts = { ensure_installed = { "delve" } },
+        "rcarriga/nvim-dap-ui",
+        dependencies = { "nvim-neotest/nvim-nio" },
+        config = function()
+          local dap, dapui = require("dap"), require("dapui")
+          dapui.setup()
+          -- デバッグ開始/終了時にUIを自動開閉
+          dap.listeners.after.event_initialized["dapui_config"] = function() dapui.open() end
+          dap.listeners.before.event_terminated["dapui_config"] = function() dapui.close() end
+          dap.listeners.before.event_exited["dapui_config"]     = function() dapui.close() end
+        end,
       },
+      -- インライン変数表示
       {
-        "leoluz/nvim-dap-go",
+        "theHamsta/nvim-dap-virtual-text",
         opts = {},
       },
+      -- Go DAP
+      { "leoluz/nvim-dap-go", opts = {} },
     },
+    config = function()
+      local dap = require("dap")
+
+      -- Ruby: rdbg (debug gem)
+      dap.adapters.ruby = function(callback, config)
+        callback({
+          type    = "server",
+          host    = "127.0.0.1",
+          port    = "${port}",
+          executable = {
+            command = "bundle",
+            args    = { "exec", "rdbg", "-n", "--open", "--port", "${port}",
+                        "-c", "--", config.command, config.script },
+          },
+        })
+      end
+
+      dap.configurations.ruby = {
+        {
+          type    = "ruby",
+          name    = "Debug current file",
+          request = "attach",
+          command = "ruby",
+          script  = "${file}",
+        },
+        {
+          type    = "ruby",
+          name    = "Rails server",
+          request = "attach",
+          command = "bundle",
+          script  = "bin/rails server",
+        },
+      }
+
+      -- キーマップ
+      local map = vim.keymap.set
+      map("n", "<F5>",       function() require("dap").continue() end,          { desc = "DAP Continue" })
+      map("n", "<F10>",      function() require("dap").step_over() end,         { desc = "DAP Step Over" })
+      map("n", "<F11>",      function() require("dap").step_into() end,         { desc = "DAP Step Into" })
+      map("n", "<F12>",      function() require("dap").step_out() end,          { desc = "DAP Step Out" })
+      map("n", "<leader>db", function() require("dap").toggle_breakpoint() end, { desc = "Toggle Breakpoint" })
+      map("n", "<leader>du", function() require("dapui").toggle() end,          { desc = "Toggle DAP UI" })
+    end,
   },
   -- masonとlspconfigの橋渡し
   {
     "williamboman/mason-lspconfig.nvim",
-    dependencies = { "williamboman/mason.nvim" },
+    dependencies = { "mason-org/mason.nvim" },
     config = function()
       require("mason-lspconfig").setup({
         ensure_installed = {
           -- Ruby
-          "solargraph",
+          "ruby_lsp",
           -- Go
           "gopls",
           -- Rust
@@ -440,13 +522,15 @@ local plugins = {
     "neovim/nvim-lspconfig",
     event = { "BufReadPre", "BufNewFile" },
     dependencies = {
-      "williamboman/mason.nvim",
+      "mason-org/mason.nvim",
       "williamboman/mason-lspconfig.nvim",
       "hrsh7th/cmp-nvim-lsp",
     },
     config = function()
       local lspconfig = require("lspconfig")
       local capabilities = require("cmp_nvim_lsp").default_capabilities()
+      local lsp = vim.g.lazyvim_ruby_lsp or "ruby-lsp"
+      local formatter = vim.g.lazyvim_ruby_formatter or "rubocop"
 
       -- 共通のキーマップ
       local on_attach = function(_, bufnr)
@@ -463,14 +547,10 @@ local plugins = {
         map("n", "]d", vim.diagnostic.goto_next, vim.tbl_extend("force", opts, { desc = "Next diagnostic" }))
       end
 
-      -- 各LSPの設定
+      -- 各LSPの設定（gopls/ruby_lsp は下で個別設定）
       local servers = {
-        "solargraph",    -- Ruby
-        -- "gopls",        -- Go
         "rust_analyzer", -- Rust
-        -- "elixirls",     -- Elixir
         "ts_ls",         -- JS / TS / React / Next.js
-        -- "vue_ls",        -- Vue / Nuxt.js
         "html",          -- HTML
         "tailwindcss",   -- TailwindCSS
         "dockerls",      -- Docker
@@ -481,8 +561,20 @@ local plugins = {
         lspconfig[server].setup({ on_attach = on_attach, capabilities = capabilities })
       end
 
-      -- Java（jdtlsは専用設定が必要）
-      lspconfig.jdtls.setup({ on_attach = on_attach })
+      -- Ruby: vim.g.lazyvim_ruby_lsp に従って起動
+      if lsp == "ruby-lsp" then
+        lspconfig.ruby_lsp.setup({
+          capabilities = capabilities,
+          on_attach = on_attach,
+        })
+      elseif lsp == "solargraph" then
+        lspconfig.solargraph.setup({
+          capabilities = capabilities,
+          on_attach = on_attach,
+        })
+      end
+
+      -- Java: nvim-javaが vim.lsp.enable("jdtls") で管理
       lspconfig.gopls.setup({
         on_attach = on_attach,
         capabilities = capabilities,
@@ -535,18 +627,19 @@ local plugins = {
     config = function()
       local cmp = require('cmp')
       cmp.setup({
-        mapping = cmp.mapping.preset.cmdline(),
-        sources = {
-          { name = 'nvim-lsp' },
+        mapping = cmp.mapping.preset.insert({
+          ['<C-b>']     = cmp.mapping.scroll_docs(-4),
+          ['<C-f>']     = cmp.mapping.scroll_docs(4),
+          ['<C-Space>'] = cmp.mapping.complete(),
+          ['<C-e>']     = cmp.mapping.abort(),
+          ['<CR>']      = cmp.mapping.confirm({ select = true }),
+        }),
+        sources = cmp.config.sources({
+          { name = 'nvim_lsp' },
+          { name = 'luasnip' },
+        }, {
           { name = 'buffer' },
           { name = 'path' },
-        },
-        mapping = cmp.mapping.preset.insert({
-          ['<C-b>'] = cmp.mapping.scroll_docs(-4),
-          ['<C-f>'] = cmp.mapping.scroll_docs(4),
-          ['<C-Space>'] = cmp.mapping.complete(),
-          ['<C-e>'] = cmp.mapping.abort(),
-          ['<CR>'] = cmp.mapping.confirm({ select = true }),
         }),
       })
     end,
@@ -559,23 +652,7 @@ local plugins = {
       "rafamadriz/friendly-snippets",
     },
   },
-  {
-    'hrsh7th/cmp-nvim-lsp',
-    dependencies = {
-      'neovim/nvim-lspconfig',
-    },
-    config = function()
-      require 'cmp'.setup {
-        sources = {
-          { name = 'nvim_lsp' }
-        }
-      }
-      local capabilities = require('cmp_nvim_lsp').default_capabilities()
-      require("lspconfig").gclangd.setup {
-        capabilities = capabilities,
-      }
-    end
-  },
+  { 'hrsh7th/cmp-nvim-lsp' },
   {
     'hrsh7th/cmp-buffer',
   },
@@ -598,6 +675,7 @@ local plugins = {
         formatters_by_ft = {
           go         = { "gofumpt", "goimports" },
           ruby       = { "rubocop" },
+          eruby      = { "erb-format" },
           rust       = { "rustfmt" },
           javascript = { "prettier" },
           typescript = { "prettier" },

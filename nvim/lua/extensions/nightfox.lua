@@ -1,117 +1,141 @@
 require('nightfox').setup({
   options = {
-    -- Compiled file's destination location
     compile_path = vim.fn.stdpath("cache") .. "/nightfox",
-    compile_file_suffix = "_compiled", -- Compiled file suffix
-    transparent = true,                -- Disable setting background
-    terminal_colors = true,            -- Set terminal colors (vim.g.terminal_color_*) used in `:terminal`
-    dim_inactive = false,              -- Non focused panes set to alternative background
-    module_default = true,             -- Default enable value for modules
+    compile_file_suffix = "_compiled",
+    transparent = true,
+    terminal_colors = true,
+    dim_inactive = false,
+    module_default = true,
     colorblind = {
-      enable = false,                  -- Enable colorblind support
-      simulate_only = false,           -- Only show simulated colorblind colors and not diff shifted
-      severity = {
-        protan = 0,                    -- Severity [0,1] for protan (red)
-        deutan = 0,                    -- Severity [0,1] for deutan (green)
-        tritan = 0,                    -- Severity [0,1] for tritan (blue)
-      },
+      enable = false,
+      simulate_only = false,
+      severity = { protan = 0, deutan = 0, tritan = 0 },
     },
-    styles = {             -- Style to be applied to different syntax groups
-      comments = "italic", -- Value is any valid attr-list value `:help attr-list`
+    styles = {
+      comments    = "italic",
       conditionals = "NONE",
-      constants = "NONE",
-      functions = "NONE",
-      keywords = "bold",
-      numbers = "NONE",
-      operators = "NONE",
-      strings = "NONE",
-      types = "bold",
-      variables = "bold",
+      constants   = "NONE",
+      functions   = "NONE",
+      keywords    = "bold",
+      numbers     = "NONE",
+      operators   = "NONE",
+      strings     = "NONE",
+      types       = "bold",
+      variables   = "bold",
     },
-    inverse = { -- Inverse highlight for different types
+    inverse = {
       match_paren = false,
-      visual = false,
-      search = false,
+      visual      = false,
+      search      = false,
     },
-    modules = { -- List of various plugins and additional options
+    modules = {
       treesitter = true,
-      native_lsp = {
-        enable     = true,
-        background = true,
-      },
-      lazy_nvim = {
-        enable = true,
-      },
-      diagnostic = {
-        enable     = true,
-        background = true,
-      },
+      native_lsp = { enable = true, background = true },
+      lazy_nvim  = { enable = true },
+      diagnostic = { enable = true, background = true },
     },
   },
   palettes = {},
   specs = {
     nightfox = {
       syntax = {
-        keyword = "orange",
-        variable = "magenta"
+        keyword  = "orange",
+        variable = "magenta",
       }
     }
   },
   groups = {
     all = {
-      ["@keyword"]                              = { fg = "palette.orange" },
-      ["@keyword.function"]                     = { fg = "palette.orange" },
-      ["@keyword.operator"]                     = { fg = "palette.orange" },
-      ["@keyword.return"]                       = { fg = "palette.orange" },
-      ["@keyword.import"]                       = { fg = "palette.orange" },
-      ["@keyword.type"]                         = { fg = "palette.orange" },
-      ["@variable"]                             = { fg = "palette.magenta" },
-      ["@variable.builtin"]                     = { fg = "palette.magenta" },
-      ["@variable.parameter"]                   = { fg = "palette.magenta" },
-      ["@variable.member"]                      = { fg = "palette.magenta" },
-      -- ★ LSP Semantic Tokens（Go向け）
-      -- @lsp.type.variable.go → @lsp.type.variable にリンクしているので両方設定
-      ["@lsp.type.variable"]                    = { fg = "palette.magenta" },
-      ["@lsp.type.variable.go"]                 = { fg = "palette.magenta" },
+      -- treesitter 汎用グループ
+      ["@keyword"]           = { fg = "palette.orange" },
+      ["@keyword.function"]  = { fg = "palette.orange" },
+      ["@keyword.operator"]  = { fg = "palette.orange" },
+      ["@keyword.return"]    = { fg = "palette.orange" },
+      ["@keyword.import"]    = { fg = "palette.orange" },
+      ["@keyword.type"]      = { fg = "palette.orange" },
+      ["@variable"]          = { fg = "palette.magenta" },
+      ["@variable.builtin"]  = { fg = "palette.magenta" },
+      ["@variable.parameter"] = { fg = "palette.magenta" },
+      ["@variable.member"]   = { fg = "palette.magenta" },
 
-      -- chan修飾子（チャネル変数）
-      ["@lsp.mod.chan.go"]                      = { fg = "palette.magenta" },
-      ["@lsp.typemod.variable.chan.go"]         = { fg = "palette.magenta" },
+      -- ★ Go LSP Semantic Tokens
+      ["@lsp.type.variable"]                  = { fg = "palette.magenta" },
+      ["@lsp.type.variable.go"]               = { fg = "palette.magenta" },
+      ["@lsp.mod.chan.go"]                     = { fg = "palette.magenta" },
+      ["@lsp.typemod.variable.chan.go"]        = { fg = "palette.magenta" },
+      ["@lsp.mod.definition.go"]              = { fg = "palette.magenta" },
+      ["@lsp.typemod.variable.definition.go"] = { fg = "palette.magenta" },
+      ["@lsp.type.parameter.go"]              = { fg = "palette.magenta" },
+      ["@lsp.type.property.go"]               = { fg = "palette.magenta" },
+      ["@lsp.type.function.go"]               = { fg = "palette.blue" },
+      ["@lsp.type.method.go"]                 = { fg = "palette.blue" },
+      ["@lsp.type.type.go"]                   = { fg = "palette.cyan" },
+      ["@lsp.type.interface.go"]              = { fg = "palette.cyan" },
+      ["@lsp.type.struct.go"]                 = { fg = "palette.cyan", style = "bold" },
+      ["@lsp.type.keyword.go"]                = { fg = "palette.orange", style = "bold" },
+      ["@lsp.type.namespace.go"]              = { fg = "palette.yellow" },
+      ["@lsp.type.number.go"]                 = { fg = "palette.yellow" },
+      ["@lsp.type.string.go"]                 = { fg = "palette.green" },
+      ["@lsp.type.comment.go"]                = { fg = "palette.comment" },
+      ["@lsp.type.operator.go"]               = { fg = "palette.cyan" },
 
-      -- definition修飾子（変数定義）
-      ["@lsp.mod.definition.go"]                = { fg = "palette.magenta" },
-      ["@lsp.typemod.variable.definition.go"]   = { fg = "palette.magenta" },
+      -- ★ Ruby treesitter グループ
+      ["@type.ruby"]                   = { fg = "palette.cyan", style = "bold" },
+      ["@string.special.symbol.ruby"]  = { fg = "palette.cyan" },
+      ["@function.method.ruby"]        = { fg = "palette.blue" },
+      ["@function.method.call.ruby"]   = { fg = "palette.blue" },
+      ["@variable.parameter.ruby"]     = { fg = "palette.magenta" },
+      ["@constant.ruby"]               = { fg = "palette.yellow" },
 
-      -- ★ Go全般のLSP Semantic Tokens追加設定
-      ["@lsp.type.parameter.go"]                = { fg = "palette.magenta" },
-      ["@lsp.type.property.go"]                 = { fg = "palette.magenta" },
-      ["@lsp.type.function.go"]                 = { fg = "palette.blue" },
-      ["@lsp.type.method.go"]                   = { fg = "palette.blue" },
-      ["@lsp.type.type.go"]                     = { fg = "palette.cyan" },
-      ["@lsp.type.interface.go"]                = { fg = "palette.cyan" },
-      ["@lsp.type.struct.go"]                   = { fg = "palette.cyan", bold = 'true' },
-      ["@lsp.type.keyword.go"]                  = { fg = "palette.orange", bold = 'true' },
-      ["@lsp.type.namespace.go"]                = { fg = "palette.yellow" },
-      ["@lsp.type.number.go"]                   = { fg = "palette.yellow" },
-      ["@lsp.type.string.go"]                   = { fg = "palette.green" },
-      ["@lsp.type.comment.go"]                  = { fg = "palette.comment" },
-      ["@lsp.type.operator.go"]                 = { fg = "palette.cyan" },
-      -- ★ Markdown ハイライト設定
-      ["@markup.heading.1.markdown"]            = { fg = "palette.red", bold = 'true' },
-      ["@markup.heading.2.markdown"]            = { fg = "palette.orange", bold = 'true' },
-      ["@markup.heading.3.markdown"]            = { fg = "palette.yellow", bold = 'true' },
-      ["@markup.heading.4.markdown"]            = { fg = "palette.green", bold = 'true' },
-      ["@markup.heading.5.markdown"]            = { fg = "palette.blue", bold = 'true' },
-      ["@markup.heading.6.markdown"]            = { fg = "palette.magenta", bold = 'true' },
-      -- 区切り線（---）
+      -- ★ Ruby LSP Semantic Tokens（solargraph）
+      ["@lsp.type.variable.ruby"]   = { fg = "palette.magenta" },
+      ["@lsp.type.class.ruby"]      = { fg = "palette.cyan", style = "bold" },
+      ["@lsp.type.module.ruby"]     = { fg = "palette.cyan" },
+      ["@lsp.type.method.ruby"]     = { fg = "palette.blue" },
+      ["@lsp.type.parameter.ruby"]  = { fg = "palette.magenta" },
+      ["@lsp.type.property.ruby"]   = { fg = "palette.magenta" },
+      ["@lsp.type.namespace.ruby"]  = { fg = "palette.yellow" },
+      ["@lsp.type.string.ruby"]     = { fg = "palette.green" },
+      ["@lsp.type.number.ruby"]     = { fg = "palette.yellow" },
+      ["@lsp.type.comment.ruby"]    = { fg = "palette.comment" },
+      ["@lsp.type.keyword.ruby"]    = { fg = "palette.orange", style = "bold" },
+      ["@lsp.type.constant.ruby"]   = { fg = "palette.yellow" },
+
+      -- ★ Java LSP Semantic Tokens（jdtls）
+      ["@lsp.type.variable.java"]      = { fg = "palette.magenta" },
+      ["@lsp.type.parameter.java"]     = { fg = "palette.magenta" },
+      ["@lsp.type.field.java"]         = { fg = "palette.magenta" },
+      ["@lsp.type.property.java"]      = { fg = "palette.magenta" },
+      ["@lsp.type.function.java"]      = { fg = "palette.blue" },
+      ["@lsp.type.method.java"]        = { fg = "palette.blue" },
+      ["@lsp.type.class.java"]         = { fg = "palette.cyan", style = "bold" },
+      ["@lsp.type.interface.java"]     = { fg = "palette.cyan" },
+      ["@lsp.type.enum.java"]          = { fg = "palette.cyan", style = "bold" },
+      ["@lsp.type.enumMember.java"]    = { fg = "palette.yellow" },
+      ["@lsp.type.typeParameter.java"] = { fg = "palette.cyan" },
+      ["@lsp.type.annotation.java"]    = { fg = "palette.yellow" },
+      ["@lsp.type.namespace.java"]     = { fg = "palette.yellow" },
+      ["@lsp.type.keyword.java"]       = { fg = "palette.orange", style = "bold" },
+      ["@lsp.type.string.java"]        = { fg = "palette.green" },
+      ["@lsp.type.number.java"]        = { fg = "palette.yellow" },
+      ["@lsp.type.comment.java"]       = { fg = "palette.comment" },
+      ["@lsp.type.operator.java"]      = { fg = "palette.cyan" },
+
+      -- ★ Markdown
+      ["@markup.heading.1.markdown"]            = { fg = "palette.red", style = "bold" },
+      ["@markup.heading.2.markdown"]            = { fg = "palette.orange", style = "bold" },
+      ["@markup.heading.3.markdown"]            = { fg = "palette.yellow", style = "bold" },
+      ["@markup.heading.4.markdown"]            = { fg = "palette.green", style = "bold" },
+      ["@markup.heading.5.markdown"]            = { fg = "palette.blue", style = "bold" },
+      ["@markup.heading.6.markdown"]            = { fg = "palette.magenta", style = "bold" },
       ["@punctuation.special.markdown"]         = { fg = "palette.cyan" },
-      ["@markup.strong.markdown_inline"]        = { fg = "palette.fg1", bold = 'true' },
+      ["@markup.strong.markdown_inline"]        = { fg = "palette.fg1", style = "bold" },
       ["@markup.italic.markdown_inline"]        = { fg = "palette.fg1" },
-      ["@markup.strikethrough.markdown_inline"] = { fg = "palette.comment", strikethrough = 'true' },
+      ["@markup.strikethrough.markdown_inline"] = { fg = "palette.comment", style = "strikethrough" },
       ["@markup.raw.markdown_inline"]           = { fg = "palette.green", bg = "palette.bg2" },
       ["@markup.raw.block.markdown"]            = { fg = "palette.green" },
-      ["@markup.link.label.markdown_inline"]    = { fg = "palette.blue", underline = 'true' },
-      ["@markup.link.url.markdown_inline"]      = { fg = "palette.cyan", underline = 'true' },
+      ["@markup.link.label.markdown_inline"]    = { fg = "palette.blue", style = "underline" },
+      ["@markup.link.url.markdown_inline"]      = { fg = "palette.cyan", style = "underline" },
       ["@markup.list.markdown"]                 = { fg = "palette.orange" },
       ["@markup.list.checked.markdown"]         = { fg = "palette.green" },
       ["@markup.list.unchecked.markdown"]       = { fg = "palette.comment" },
@@ -121,20 +145,12 @@ require('nightfox').setup({
       ["@tag.markdown"]                         = { fg = "palette.blue" },
     },
     nightfox = {
-      -- treesitter ハイライトグループを明示的に上書き
       ["@keyword"]  = { fg = "palette.orange" },
-      -- ["@keyword.function"]   = { fg = "palette.orange" },
-      -- ["@keyword.return"]     = { fg = "palette.orange" },
       ["@variable"] = { fg = "palette.magenta" },
-      -- ["@variable.builtin"]   = { fg = "palette.magenta" },
-      -- ["@variable.parameter"] = { fg = "palette.magenta" },
     },
   },
 })
-vim.fn.system("rm -rf " .. vim.fn.stdpath("cache") .. "/nightfox")
-vim.api.nvim_create_autocmd("VimEnter", {
-  once = true,
-  callback = function()
-    vim.cmd("colorscheme nightfox")
-  end,
-})
+
+-- キャッシュ削除は不要（nightfoxはコンフィグのハッシュで自動的に無効化する）
+-- setup() 直後に colorscheme を適用する（VimEnter autocmd は不要）
+vim.cmd("colorscheme nightfox")

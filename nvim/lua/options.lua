@@ -30,7 +30,8 @@ vim.api.nvim_set_option('scrolloff', 2)
 vim.api.nvim_set_option('ignorecase', true)
 vim.api.nvim_set_option('smartcase', true)
 vim.api.nvim_set_option('inccommand', 'split')
-
+vim.g.lazyvim_ruby_lsp = "ruby-lsp"
+vim.g.lazyvim_ruby_formatter = "rubocop"
 --
 vim.api.nvim_create_user_command('InitLua', function() vim.cmd.edit(vim.fn.stdpath('config') .. '/init.lua') end, {})
 -- vim.treesitter.start = (function(wrapped)
