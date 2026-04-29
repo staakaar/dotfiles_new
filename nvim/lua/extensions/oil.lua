@@ -213,7 +213,7 @@ vim.api.nvim_create_autocmd("User", {
     -- oil バッファが有効かつ通常バッファの場合のみプレビューを開く
     if vim.api.nvim_buf_is_valid(args.data.buf)
         and vim.bo[args.data.buf].filetype == "oil" then
-      oil.open_preview()
+      oil.open_preview({ split = "belowright" })
     end
   end,
 })

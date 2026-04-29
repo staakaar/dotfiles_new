@@ -547,9 +547,8 @@ local plugins = {
         map("n", "]d", vim.diagnostic.goto_next, vim.tbl_extend("force", opts, { desc = "Next diagnostic" }))
       end
 
-      -- 各LSPの設定（gopls/ruby_lsp は下で個別設定）
+      -- 各LSPの設定（gopls/ruby_lsp/rust_analyzer は下で個別設定）
       local servers = {
-        "rust_analyzer", -- Rust
         "ts_ls",         -- JS / TS / React / Next.js
         "html",          -- HTML
         "tailwindcss",   -- TailwindCSS
@@ -560,6 +559,31 @@ local plugins = {
       for _, server in ipairs(servers) do
         lspconfig[server].setup({ on_attach = on_attach, capabilities = capabilities })
       end
+
+      -- Rust
+      lspconfig.rust_analyzer.setup({
+        on_attach = on_attach,
+        capabilities = capabilities,
+        settings = {
+          ["rust-analyzer"] = {
+            cargo = {
+              allFeatures = true,
+              buildScripts = { enable = true },
+            },
+            checkOnSave = { command = "clippy" },
+            procMacro = { enable = true },
+            inlayHints = {
+              bindingModeHints = { enable = true },
+              chainingHints    = { enable = true },
+              parameterHints   = { enable = true },
+              typeHints        = { enable = true },
+            },
+            completion = {
+              callable = { snippets = "fill_arguments" },
+            },
+          },
+        },
+      })
 
       -- Ruby: vim.g.lazyvim_ruby_lsp に従って起動
       if lsp == "ruby-lsp" then
@@ -626,13 +650,39 @@ local plugins = {
     "hrsh7th/nvim-cmp",
     config = function()
       local cmp = require('cmp')
+      local luasnip = require('luasnip')
+      require("luasnip.loaders.from_vscode").lazy_load()
+
       cmp.setup({
+        snippet = {
+          expand = function(args)
+            luasnip.lsp_expand(args.body)
+          end,
+        },
         mapping = cmp.mapping.preset.insert({
           ['<C-b>']     = cmp.mapping.scroll_docs(-4),
           ['<C-f>']     = cmp.mapping.scroll_docs(4),
           ['<C-Space>'] = cmp.mapping.complete(),
           ['<C-e>']     = cmp.mapping.abort(),
           ['<CR>']      = cmp.mapping.confirm({ select = true }),
+          ['<Tab>']     = cmp.mapping(function(fallback)
+            if cmp.visible() then
+              cmp.select_next_item()
+            elseif luasnip.expand_or_jumpable() then
+              luasnip.expand_or_jump()
+            else
+              fallback()
+            end
+          end, { 'i', 's' }),
+          ['<S-Tab>']   = cmp.mapping(function(fallback)
+            if cmp.visible() then
+              cmp.select_prev_item()
+            elseif luasnip.jumpable(-1) then
+              luasnip.jump(-1)
+            else
+              fallback()
+            end
+          end, { 'i', 's' }),
         }),
         sources = cmp.config.sources({
           { name = 'nvim_lsp' },
